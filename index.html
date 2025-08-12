@@ -3,263 +3,107 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Onyx — Animated Store</title>
-<link rel="icon" type="image/png" href="images/favicon.png" />
+<title>Onyx — Store</title>
 <style>
-  /* Basic reset */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html,body { height: 100%; }
-
-  /* Background & canvas */
-  body {
+  /* --- Reset & base --- */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: radial-gradient(circle at 20% 10%, rgba(110,0,255,0.12), transparent 10%),
-                radial-gradient(circle at 80% 80%, rgba(0,200,255,0.06), transparent 12%),
-                #000010;
-    color: #fff;
-    overflow: hidden;
-  }
-  #star-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
+    background:#000010; color:#fff;
+    overflow:hidden;
   }
 
-  /* Subtle floating nebula layer */
-  .nebula {
-    position: fixed;
-    inset: 0;
+  /* canvas & nebula */
+  #star-canvas{position:fixed;inset:0;z-index:0}
+  .nebula{position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
       radial-gradient(600px 400px at 10% 20%, rgba(120,0,255,0.06), transparent 10%),
       radial-gradient(600px 400px at 90% 80%, rgba(0,120,255,0.05), transparent 10%);
-    mix-blend-mode: screen;
-    z-index: 0;
-    animation: nebmove 18s linear infinite;
-    opacity: 0.9;
-    filter: blur(20px);
-    pointer-events: none;
+    filter:blur(22px); opacity:0.95; mix-blend-mode:screen;
+    animation:nebmove 18s linear infinite;
   }
-  @keyframes nebmove {
-    0% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-30px) scale(1.02); }
-    100% { transform: translateY(0) scale(1); }
+  @keyframes nebmove{0%{transform:translateY(0)}50%{transform:translateY(-30px)}100%{transform:translateY(0)}}
+
+  /* header (large) */
+  header{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:22px 36px;
+    background:linear-gradient(90deg, rgba(110,0,255,0.12), rgba(255,0,170,0.05));backdrop-filter: blur(6px);
+  }
+  header h1{font-size:34px;letter-spacing:1px;color:#ffd6ff;text-shadow:0 0 18px rgba(255,150,255,0.06)}
+  .cart-button{
+    background:linear-gradient(90deg,#fff,#f3f3f3); color:#5c0088; border:none; padding:12px 18px; border-radius:12px;
+    font-weight:800; cursor:pointer; font-size:18px; box-shadow:0 8px 28px rgba(140,0,255,0.08);
   }
 
-  /* Page frame */
-  header {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 28px;
-    background: linear-gradient(90deg, rgba(110,0,255,0.14), rgba(255,0,170,0.08));
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-    backdrop-filter: blur(4px);
+  /* discord claim banner (keeps present) */
+  .claim-banner{position:relative;z-index:3;margin:18px auto;max-width:1200px;padding:16px 20px;border-radius:12px;
+    border:1px solid rgba(255,0,120,0.14); background:linear-gradient(90deg, rgba(255,10,120,0.06), rgba(255,120,180,0.02));
+    text-align:center;font-weight:800;color:#ffd7ea; box-shadow:0 10px 30px rgba(255,0,140,0.03);
   }
-  header h1 {
-    font-size: 26px;
-    text-shadow: 0 0 12px rgba(180,100,255,0.12);
-    letter-spacing: 0.6px;
-  }
-  .cart-button {
-    background: linear-gradient(90deg,#fff,#f4f4f4);
-    color: #5c0088;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 6px 18px rgba(150,0,200,0.08);
-    transition: transform .18s ease, box-shadow .18s;
-  }
-  .cart-button:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(150,0,200,0.12); }
+  .claim-banner a{color:#ffd0ff;text-decoration:underline}
 
-  /* Warning banner */
-  .warning-banner {
-    position: relative;
-    z-index: 3;
-    margin: 14px auto;
-    max-width: 1100px;
-    background: linear-gradient(90deg, rgba(255,20,100,0.08), rgba(255,80,140,0.03));
-    border: 1px solid rgba(255,0,100,0.18);
-    color: #ffd3e6;
-    padding: 12px 16px;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: 700;
-    box-shadow: 0 6px 30px rgba(255,0,140,0.03);
-    z-index: 3;
-  }
-  .warning-banner a { color: #ffb5e0; text-decoration: underline; }
+  /* main layout (larger) */
+  .main{position:relative;z-index:2;display:flex;gap:28px;max-width:1400px;margin:18px auto;padding:0 28px 80px}
+  .sidebar{width:300px;background:rgba(12,4,30,0.6);padding:20px;border-radius:14px;border:1px solid rgba(120,0,255,0.12);
+    box-shadow:0 18px 60px rgba(20,0,60,0.5);backdrop-filter:blur(6px)}
+  .sidebar button{display:block;width:100%;margin-bottom:14px;padding:14px;border-radius:12px;border:none;
+    background:linear-gradient(90deg,#7e00ff,#ff1599);color:white;font-weight:900;font-size:18px;cursor:pointer;
+    box-shadow:0 8px 26px rgba(140,0,255,0.12);transition:transform .14s}
+  .sidebar button:hover{transform:translateY(-5px)}
 
-  /* Layout */
-  .main {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    gap: 24px;
-    max-width: 1200px;
-    margin: 18px auto;
-    padding: 0 22px 80px;
-  }
-  .sidebar {
-    width: 240px;
-    background: rgba(10,4,20,0.45);
-    border-radius: 14px;
-    padding: 18px;
-    border: 1px solid rgba(120,0,255,0.12);
-    box-shadow: 0 10px 30px rgba(20,0,60,0.5);
-    backdrop-filter: blur(6px);
-    transition: transform .28s cubic-bezier(.2,.9,.27,1);
-  }
-  .sidebar button {
-    display: block;
-    width: 100%;
-    margin-bottom: 12px;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(90deg,#7e00ff,#ff1599);
-    color: white;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 6px 18px rgba(140,0,255,0.12);
-    transition: transform .15s;
-  }
-  .sidebar button:hover { transform: translateY(-4px) scale(1.01); }
+  .products{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:28px}
 
-  .products {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
-    gap: 22px;
+  /* product card bigger */
+  .product{
+    background:linear-gradient(180deg, rgba(40,6,70,0.85), rgba(10,3,30,0.8));
+    border-radius:16px;padding:20px;border:1px solid rgba(160,0,255,0.10);
+    box-shadow:0 18px 60px rgba(0,0,0,0.7);transform-origin:center;animation:cardIn .5s ease both;
   }
+  @keyframes cardIn{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+  .product img{width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:14px;background:linear-gradient(180deg,#222,#111)}
+  .product h3{font-size:20px;margin-bottom:8px}
+  .product p{font-size:18px;color:#e8e0ff;margin-bottom:12px;font-weight:700}
+  .product .actions{display:flex;gap:12px;align-items:center}
+  .add-btn{flex:1;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#ff66ff,#9c00ff);
+    color:#120017;font-weight:900;font-size:17px;cursor:pointer;transition:transform .12s}
+  .add-btn:hover{transform:translateY(-5px)}
+  .price-tag{font-weight:900;color:#ffd7ff;font-size:18px}
 
-  /* product card */
-  .product {
-    background: linear-gradient(180deg, rgba(40,6,70,0.7), rgba(10,4,20,0.6));
-    border-radius: 14px;
-    padding: 18px;
-    border: 1px solid rgba(150,0,255,0.12);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    transform-origin: center;
-    animation: cardIn .6s ease both;
-    transition: transform .18s ease, box-shadow .18s;
-  }
-  @keyframes cardIn { from { transform: translateY(8px) scale(.98); opacity: 0 } to { transform: translateY(0) scale(1); opacity: 1 } }
-  .product:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 18px 48px rgba(170,0,255,0.18); }
+  /* intro overlay (big & centered) */
+  .intro{position:fixed;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at center, rgba(0,0,0,0.55), rgba(0,0,0,0.85));backdrop-filter:blur(6px)}
+  .intro-card{width:min(820px,94%);background:linear-gradient(180deg, rgba(15,6,35,0.95), rgba(10,3,35,0.96));
+    border-radius:16px;padding:34px;text-align:center;border:1px solid rgba(160,0,255,0.10);box-shadow:0 28px 90px rgba(10,0,40,0.8)}
+  .intro h2{font-size:36px;margin-bottom:10px;color:#ffd6ff}
+  .choices{display:flex;gap:22px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+  .choice{padding:18px 26px;border-radius:14px;border:2px solid rgba(255,255,255,0.04);
+    background:linear-gradient(90deg,#6b00ff,#ff2288);font-weight:900;font-size:20px;color:white;cursor:pointer}
 
-  .product img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 10px;
-    display:block;
-    margin-bottom: 12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
-  }
-  .product h3 { font-size: 18px; margin-bottom: 6px; }
-  .product p { color: #dcd6ff; margin-bottom: 10px; font-weight:600; }
-  .product .actions { display:flex; gap:10px; align-items:center; }
-  .add-btn {
-    flex:1;
-    background: linear-gradient(90deg,#ff66ff,#9c00ff);
-    color: #110017;
-    border:none;
-    padding:10px;
-    border-radius:10px;
-    font-weight:800;
-    cursor:pointer;
-    transition: transform .12s;
-  }
-  .add-btn:hover { transform: translateY(-3px); }
+  /* modal */
+  .modal{position:fixed;inset:0;z-index:12;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.85));padding:26px}
+  .modal-card{width:520px;background:linear-gradient(180deg, rgba(20,4,60,0.95), rgba(10,3,35,0.95));border-radius:14px;padding:18px;border:1px solid rgba(180,0,255,0.12);box-shadow:0 30px 90px rgba(0,0,0,0.8)}
+  .checkout-item{display:flex;justify-content:space-between;padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:8px}
+  .checkout-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+  .buy-btn{padding:12px 18px;border-radius:12px;border:none;background:linear-gradient(90deg,#ff66ff,#9c00ff);color:#120017;font-weight:900;font-size:18px;cursor:pointer}
+  .cancel-btn{padding:10px 14px;border-radius:10px;border:none;background:rgba(255,255,255,0.06);color:#fff;cursor:pointer}
 
-  /* Intro overlay */
-  .intro {
-    position: fixed;
-    inset: 0;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at center, rgba(0,0,0,0.55), rgba(0,0,0,0.8));
-    backdrop-filter: blur(6px);
-    animation: introFade .6s ease;
-  }
-  @keyframes introFade { from { opacity: 0 } to { opacity: 1 } }
+  /* flying star */
+  .fly-star{position:fixed;z-index:20;font-size:26px;pointer-events:none;transition:transform 800ms cubic-bezier(.2,.9,.3,1),opacity 300ms}
 
-  .intro-card {
-    width: min(760px, 92%);
-    background: linear-gradient(180deg, rgba(15,6,35,0.9), rgba(10,3,30,0.85));
-    border-radius: 16px;
-    padding: 34px;
-    text-align: center;
-    border: 1px solid rgba(150,0,255,0.12);
-    box-shadow: 0 18px 60px rgba(30,2,60,0.7);
-    transform-origin: center;
-    animation: popIn .5s cubic-bezier(.2,.9,.3,1);
-  }
-  @keyframes popIn { from { transform: scale(.96) translateY(8px); opacity:0 } to { transform: scale(1) translateY(0); opacity:1 } }
-
-  .intro h2 { font-size: 30px; margin-bottom: 18px; color: #ffd0ff; text-shadow: 0 0 10px rgba(255,150,255,0.06); }
-  .intro p { color: #dcd0ff; margin-bottom: 18px; font-weight:600; }
-
-  .choice-row { display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
-  .choice {
-    background: linear-gradient(180deg,#6b00ff,#ff2288);
-    color: white;
-    padding: 14px 22px;
-    border-radius: 12px;
-    font-weight: 800;
-    cursor: pointer;
-    border: 2px solid rgba(255,255,255,0.04);
-    box-shadow: 0 10px 30px rgba(120,0,255,0.14);
-    transition: transform .14s ease;
-  }
-  .choice:hover { transform: translateY(-6px) scale(1.02); }
-
-  /* Modal (checkout) */
-  .modal {
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.85));
-    padding: 20px;
-    animation: modalFade .18s ease;
-  }
-  @keyframes modalFade { from { opacity: 0 } to { opacity: 1 } }
-  .modal-card {
-    width: 420px;
-    background: linear-gradient(180deg, rgba(20,4,60,0.95), rgba(10,3,35,0.95));
-    border-radius: 12px;
-    padding: 18px;
-    border: 1px solid rgba(160,0,255,0.12);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-    transform-origin: center;
-    animation: slideUp .28s cubic-bezier(.2,.9,.3,1);
-  }
-  @keyframes slideUp { from { transform: translateY(12px) scale(.98); opacity:0 } to { transform: translateY(0) scale(1); opacity:1 } }
-  .checkout-item { display:flex; justify-content:space-between; padding:8px 6px; margin-bottom:8px; border-radius:8px; background: rgba(255,255,255,0.02); }
-  .checkout-footer { margin-top:12px; display:flex; gap:10px; justify-content:space-between; align-items:center; }
-
-  .buy-btn { background: linear-gradient(90deg,#ff66ff,#9c00ff); color:#120017; border:none; padding:10px 14px; border-radius:8px; font-weight:800; cursor:pointer; }
-  .cancel-btn { background: rgba(255,255,255,0.06); color:#fff; border:none; padding:9px 12px; border-radius:8px; cursor:pointer; }
-
-  /* small screens */
-  @media (max-width:880px){
-    .main { flex-direction: column; padding-bottom: 160px; }
-    .sidebar { width:100%; display:flex; gap:10px; overflow-x:auto; padding-bottom:12px; }
-    .sidebar button { flex:0 0 auto; min-width:160px; }
-    .products { grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); }
-    .intro-card { padding: 22px; }
+  /* responsive */
+  @media (max-width:1000px){
+    .sidebar{width:100%;display:flex;gap:12px;overflow-x:auto}
+    .main{flex-direction:column}
+    .products{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+    .modal-card{width:92%}
+    .product img{height:160px}
   }
 </style>
 </head>
 <body>
+
+<!-- ====== CONFIG: replace this with your actual discord invite link ====== -->
+<script>const DISCORD_INVITE = "https://discord.gg/your-invite-here";</script>
 
 <canvas id="star-canvas"></canvas>
 <div class="nebula" aria-hidden="true"></div>
@@ -269,46 +113,51 @@
   <button class="cart-button" onclick="openCart()">🛒 Cart (<span id="cart-count">0</span>)</button>
 </header>
 
-<div class="warning-banner" role="alert">
-  ⚠️ To claim purchased items, you must join our <a href="#" id="discord-link">Discord server</a>!
+<div class="claim-banner" role="status">
+  ⚠️ To claim purchased items, please join our <a href="#" id="discord-link">Discord server</a>.
 </div>
 
-<!-- Intro overlay -->
-<div id="intro" class="intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+<!-- Intro -->
+<div id="intro" class="intro" role="dialog" aria-modal="true">
   <div class="intro-card">
-    <h2 id="intro-title">What are you looking for?</h2>
-    <p>Choose one to continue — the store will show the matching items.</p>
-    <div class="choice-row">
+    <h2>What are you looking for?</h2>
+    <p style="color:#e8d6ff;font-weight:700;margin-top:6px;font-size:16px">Pick one to view matching items.</p>
+    <div class="choices" style="margin-top:20px">
       <button class="choice" onclick="selectMode('grow')">Grow a garden stuff</button>
       <button class="choice" onclick="selectMode('design')">Server designing</button>
     </div>
-    <p style="margin-top:16px; color:#f1d9ff; font-size:13px;">(Everything is placeholder — you can swap products and images later)</p>
   </div>
 </div>
 
-<!-- Main content -->
+<!-- Main layout -->
 <div class="main" id="main-content" aria-hidden="true">
-  <aside class="sidebar" aria-label="Categories">
-    <button onclick="showCategory('all')">All Products</button>
-    <button onclick="showCategory('placeholder')">Featured</button>
-    <button onclick="showCategory('placeholder')">Placeholder</button>
+  <aside class="sidebar" id="category-list" aria-label="Categories">
+    <!-- categories inserted here -->
     <button onclick="resetIntro()">Back to choices</button>
   </aside>
 
   <section class="products" id="products" aria-live="polite">
-    <!-- product cards injected here -->
+    <!-- products inserted here -->
   </section>
 </div>
 
 <!-- Checkout modal -->
-<div id="cart-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+<div id="cart-modal" class="modal" role="dialog" aria-modal="true">
   <div class="modal-card">
-    <h3 id="checkout-title" style="color:#ffd0ff; margin-bottom:8px;">Checkout</h3>
-    <div id="cart-items" style="max-height:260px; overflow:auto; margin-bottom:8px;"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <div style="color:#ddd;font-weight:700;">Payment methods: <span style="color:#ffd0ff">PayPal</span> &amp; <span style="color:#ffd0ff">Roblox</span></div>
-      <div id="cart-total" style="font-weight:900; color:#ffccff;">Total: $0.00</div>
+    <h2 style="color:#ffd6ff;margin-bottom:10px">Checkout</h2>
+    <div id="cart-items" style="max-height:320px;overflow:auto;margin-bottom:10px"></div>
+
+    <div style="display:flex;gap:12px;align-items:center;justify-content:space-between">
+      <div style="display:flex;gap:12px;align-items:center">
+        <label for="payment-select" style="font-weight:800;color:#e6d6ff">Payment:</label>
+        <select id="payment-select" style="padding:10px;border-radius:10px;border:none;font-weight:800">
+          <option value="paypal">PayPal</option>
+          <option value="roblox">Roblox</option>
+        </select>
+      </div>
+      <div id="cart-total" style="font-weight:900;color:#ffd7ff;font-size:20px">Total: $0.00</div>
     </div>
+
     <div class="checkout-footer">
       <button class="buy-btn" onclick="buyItems()">Buy</button>
       <button class="cancel-btn" onclick="closeCart()">Close</button>
@@ -316,217 +165,249 @@
   </div>
 </div>
 
+<!-- sound (optional) -->
 <audio id="click-sound" src="click.mp3" preload="auto"></audio>
 
 <script>
-/* ----------------------------
-   Animated starfield (canvas)
-   ---------------------------- */
+/* ---------------------------
+   Starfield canvas
+   --------------------------- */
 const canvas = document.getElementById('star-canvas');
 const ctx = canvas.getContext('2d');
 let W = canvas.width = innerWidth;
 let H = canvas.height = innerHeight;
+window.addEventListener('resize', ()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight; initStars();});
 
-window.addEventListener('resize', () => {
-  W = canvas.width = innerWidth;
-  H = canvas.height = innerHeight;
-  initStars();
-});
-
-let stars = [];
-const STAR_COUNT = Math.floor((window.innerWidth * window.innerHeight) / 30000) + 60;
-
-function rand(min,max){ return Math.random()*(max-min)+min; }
-
+let stars=[];
+const STAR_COUNT = Math.floor((innerWidth*innerHeight)/30000) + 80;
+function rand(a,b){return Math.random()*(b-a)+a}
 function initStars(){
-  stars = [];
+  stars=[];
   for(let i=0;i<STAR_COUNT;i++){
-    stars.push({
-      x: Math.random()*W,
-      y: Math.random()*H,
-      z: rand(0.2,1.2),
-      r: rand(0.3,1.6),
-      dx: rand(-0.03,0.03),
-      dy: rand(-0.02,0.02),
-      twinkle: Math.random()*1.6
-    });
+    stars.push({x:Math.random()*W,y:Math.random()*H,z:rand(0.2,1.2),r:rand(0.4,1.8),dx:rand(-0.03,0.03),dy:rand(-0.02,0.02),tw:Math.random()*1.6});
   }
 }
 initStars();
-
-let t = 0;
+let t=0;
 function draw(){
   ctx.clearRect(0,0,W,H);
-
-  // soft glow gradient overlay (subtle)
-  const grad = ctx.createLinearGradient(0,0,W,H);
-  grad.addColorStop(0, 'rgba(255,100,200,0.01)');
-  grad.addColorStop(1, 'rgba(0,100,255,0.01)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0,0,W,H);
-
-  // draw stars
-  for(let s of stars){
-    // twinkle effect
-    const tw = Math.sin(t*0.02*s.twinkle) * 0.6 + 0.8;
-    const size = s.r * tw * s.z;
+  // subtle overlay gradient
+  const g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,'rgba(255,100,200,0.01)'); g.addColorStop(1,'rgba(0,100,255,0.01)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  for(const s of stars){
+    const tw = Math.sin(t*0.02*s.tw)*0.6+0.8;
+    const size = s.r*tw*s.z;
     ctx.beginPath();
-    ctx.fillStyle = `rgba(255,255,255,${0.5 * s.z * tw})`;
-    ctx.arc(s.x, s.y, Math.max(0.2,size), 0, Math.PI*2);
-    ctx.fill();
-
-    // subtle motion
-    s.x += s.dx * (1 + 0.6*s.z);
-    s.y += s.dy * (1 + 0.6*s.z);
-
-    // wrap
-    if (s.x < -10) s.x = W + 10;
-    if (s.x > W + 10) s.x = -10;
-    if (s.y < -10) s.y = H + 10;
-    if (s.y > H + 10) s.y = -10;
+    ctx.fillStyle = `rgba(255,255,255,${0.5*s.z*tw})`;
+    ctx.arc(s.x,s.y,Math.max(0.2,size),0,Math.PI*2); ctx.fill();
+    s.x += s.dx*(1+0.6*s.z);
+    s.y += s.dy*(1+0.6*s.z);
+    if(s.x<-10) s.x=W+10; if(s.x>W+10) s.x=-10;
+    if(s.y<-10) s.y=H+10; if(s.y>H+10) s.y=-10;
   }
-
-  t++;
-  requestAnimationFrame(draw);
+  t++; requestAnimationFrame(draw);
 }
-requestAnimationFrame(draw);
+draw();
 
-/* ----------------------------
-   Products & modes
-   ---------------------------- */
-/* Two sets of placeholder products */
-const growProducts = [
-  { id: 'g1', name: 'Placeholder', price: '2.50', image: 'images/placeholder1.png' },
-  { id: 'g2', name: 'Placeholder', price: '4.00', image: 'images/placeholder2.png' },
-  { id: 'g3', name: 'Placeholder', price: '8.75', image: 'images/placeholder3.png' },
-  { id: 'g4', name: 'Placeholder', price: '12.00', image: 'images/placeholder4.png' }
-];
+/* ---------------------------
+   PRODUCTS (PLACEHOLDERS)
+   All product names are "Placeholder Product X"
+   Categories per mode are defined below
+   --------------------------- */
+const PRODUCTS = {
+  grow: {
+    "Seeds": [
+      { id: "g-s-1", name: "Placeholder Product 1", price: "2.50", img: null },
+      { id: "g-s-2", name: "Placeholder Product 2", price: "3.00", img: null }
+    ],
+    "Tools": [
+      { id: "g-t-1", name: "Placeholder Product 3", price: "6.00", img: null },
+      { id: "g-t-2", name: "Placeholder Product 4", price: "4.50", img: null }
+    ],
+    "Decor": [
+      { id: "g-d-1", name: "Placeholder Product 5", price: "8.00", img: null },
+      { id: "g-d-2", name: "Placeholder Product 6", price: "5.50", img: null }
+    ]
+  },
+  design: {
+    "Themes": [
+      { id: "d-th-1", name: "Placeholder Product 7", price: "6.00", img: null },
+      { id: "d-th-2", name: "Placeholder Product 8", price: "7.50", img: null }
+    ],
+    "Icons": [
+      { id: "d-i-1", name: "Placeholder Product 9", price: "3.50", img: null },
+      { id: "d-i-2", name: "Placeholder Product 10", price: "4.00", img: null }
+    ],
+    "Kits": [
+      { id: "d-k-1", name: "Placeholder Product 11", price: "12.00", img: null },
+      { id: "d-k-2", name: "Placeholder Product 12", price: "25.00", img: null }
+    ]
+  }
+};
 
-const designProducts = [
-  { id: 'd1', name: 'Placeholder', price: '6.00', image: 'images/placeholder5.png' },
-  { id: 'd2', name: 'Placeholder', price: '3.50', image: 'images/placeholder6.png' },
-  { id: 'd3', name: 'Placeholder', price: '10.00', image: 'images/placeholder7.png' },
-  { id: 'd4', name: 'Placeholder', price: '25.00', image: 'images/placeholder8.png' }
-];
-
-let productsData = []; // currently shown products
-let currentMode = null; // 'grow' or 'design'
+/* ---------------------------
+   State
+   --------------------------- */
+let currentMode = null;
+let currentCategory = null;
 let cart = [];
 
-/* Utility: safe play click */
+/* Utility: safe click sound */
 function playClick(){
-  const audio = document.getElementById('click-sound');
-  if (audio && audio.play) {
-    try { audio.play(); } catch(e) { /* ignore play errors */ }
+  const a = document.getElementById('click-sound'); if(a && a.play){ try{ a.play(); }catch(e){} }
+}
+
+/* Create a simple SVG placeholder data URL for images */
+function placeholderDataURL(text, w=800, h=600, bg='#241233', fg='#ffd6ff'){
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>
+    <rect width='100%' height='100%' fill='${bg}' rx='12'/>
+    <g font-family='Segoe UI, Tahoma, Verdana' font-weight='700' fill='${fg}' font-size='32' text-anchor='middle'>
+      <text x='50%' y='50%'>${text}</text>
+    </g>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+/* Render categories into sidebar */
+function renderCategories(){
+  const catList = document.getElementById('category-list');
+  catList.innerHTML = '';
+  // back button
+  const backBtn = document.createElement('button'); backBtn.textContent = 'Back to choices';
+  backBtn.onclick = resetIntro; catList.appendChild(backBtn);
+  if(!currentMode) return;
+  const cats = Object.keys(PRODUCTS[currentMode]);
+  cats.forEach(cat => {
+    const b = document.createElement('button');
+    b.textContent = cat;
+    b.onclick = ()=>{ playClick(); showProducts(cat); };
+    catList.appendChild(b);
+  });
+}
+
+/* Show products for category (or all categories) */
+function showProducts(category){
+  currentCategory = category || null;
+  const container = document.getElementById('products');
+  container.innerHTML = '';
+  if(!currentMode) return;
+  let list = [];
+  if(category === 'all' || !category){
+    Object.values(PRODUCTS[currentMode]).forEach(arr=>list=list.concat(arr));
+  } else {
+    list = PRODUCTS[currentMode][category] || [];
   }
+  if(list.length === 0){
+    container.innerHTML = `<div style="padding:26px;background:rgba(255,255,255,0.02);border-radius:12px">No items</div>`; return;
+  }
+  list.forEach((prod, i) => {
+    const card = document.createElement('div'); card.className='product';
+    // if no img specified, use data URL
+    const imgSrc = prod.img || placeholderDataURL('Image',800,500);
+    card.innerHTML = `
+      <img src="${imgSrc}" alt="${prod.name}" data-id="${prod.id}">
+      <h3>${prod.name}</h3>
+      <p class="price-tag">$${parseFloat(prod.price).toFixed(2)}</p>
+      <div class="actions">
+        <button class="add-btn" data-id="${prod.id}">Add to Cart</button>
+      </div>
+    `;
+    // add listener for button & enable star animation
+    container.appendChild(card);
+    const btn = card.querySelector('.add-btn');
+    btn.addEventListener('click', ()=>animateAddToCart(prod, card.querySelector('img')));
+  });
 }
 
 /* Intro selection */
 function selectMode(mode){
   playClick();
   currentMode = mode;
-  if (mode === 'grow') productsData = growProducts.slice();
-  else productsData = designProducts.slice();
-
-  // close intro & reveal main
-  const intro = document.getElementById('intro');
-  intro.style.display = 'none';
+  document.getElementById('intro').style.display = 'none';
   document.getElementById('main-content').setAttribute('aria-hidden','false');
-  renderProducts('all');
+  renderCategories();
+  showProducts('all');
 }
 
 /* Back to intro */
 function resetIntro(){
   playClick();
+  currentMode = null;
+  currentCategory = null;
+  cart = [];
+  updateCartCount();
   document.getElementById('intro').style.display = 'flex';
   document.getElementById('main-content').setAttribute('aria-hidden','true');
-  productsData = [];
-  currentMode = null;
   document.getElementById('products').innerHTML = '';
+  renderCategories();
 }
 
-/* Render function */
-function renderProducts(filter = 'all'){
-  const container = document.getElementById('products');
-  container.innerHTML = '';
-  const list = (filter === 'all') ? productsData : productsData.filter(p => p.category === filter);
-  if (!list || list.length === 0) {
-    container.innerHTML = `<div style="color:#ddd;padding:28px;border-radius:12px;background:rgba(255,255,255,0.02)">No products in this view. Choose another category or go back.</div>`;
-    return;
-  }
+/* Update cart badge */
+function updateCartCount(){
+  document.getElementById('cart-count').textContent = cart.length;
+}
 
-  list.forEach((product, i) => {
-    const card = document.createElement('div');
-    card.className = 'product';
-    card.style.animationDelay = `${i * 60}ms`;
-    card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" />
-      <h3>${product.name}</h3>
-      <p>$${product.price}</p>
-      <div class="actions">
-        <button class="add-btn" onclick="addToCart('${product.id}')">Add to Cart</button>
-      </div>
-    `;
-    container.appendChild(card);
+/* Animate star from image to cart, then add to cart */
+function animateAddToCart(product, imgEl){
+  playClick();
+  // get start position: center of image
+  const imgRect = imgEl.getBoundingClientRect();
+  const startX = imgRect.left + imgRect.width/2;
+  const startY = imgRect.top + imgRect.height/2;
+  // get cart button pos
+  const cartBtn = document.querySelector('.cart-button');
+  const cartRect = cartBtn.getBoundingClientRect();
+  const endX = cartRect.left + cartRect.width/2;
+  const endY = cartRect.top + cartRect.height/2;
+
+  // create flying star element
+  const star = document.createElement('div');
+  star.className = 'fly-star';
+  star.style.left = startX + 'px';
+  star.style.top = startY + 'px';
+  star.style.transform = 'translate(-50%,-50%) scale(1)';
+  star.style.opacity = '1';
+  star.innerHTML = '⭐';
+  document.body.appendChild(star);
+
+  // force reflow then animate to cart
+  requestAnimationFrame(()=>{
+    const dx = endX - startX;
+    const dy = endY - startY;
+    star.style.transform = `translate(${dx}px, ${dy}px) scale(.3)`;
+    star.style.transition = 'transform 800ms cubic-bezier(.2,.9,.3,1), opacity 300ms';
   });
+
+  // After animation ends, remove star and add to cart & bump count
+  setTimeout(()=>{
+    star.style.opacity = '0';
+    setTimeout(()=>{ if(star && star.parentNode) star.parentNode.removeChild(star); },300);
+    // add to cart now
+    cart.push(product);
+    updateCartCount();
+    // small bounce on cart button
+    cartBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}],{duration:300,easing:'ease'});
+  },850);
 }
 
-/* Category shortcuts */
-function showCategory(key){
-  playClick();
-  if (!productsData || productsData.length === 0) return;
-  if (key === 'all') renderProducts('all');
-  else {
-    // placeholder logic: filter by id prefix for demo
-    const catList = productsData.filter(p => p.id.startsWith(key[0]) || key==='placeholder');
-    const container = document.getElementById('products');
-    container.innerHTML = '';
-    if (catList.length === 0) {
-      container.innerHTML = `<div style="color:#ddd;padding:28px;border-radius:12px;background:rgba(255,255,255,0.02)">No items found in this category.</div>`;
-      return;
-    }
-    catList.forEach((product, i) => {
-      const card = document.createElement('div'); card.className='product';
-      card.style.animationDelay = `${i*60}ms`;
-      card.innerHTML = `
-        <img src="${product.image}" alt="${product.name}" />
-        <h3>${product.name}</h3>
-        <p>$${product.price}</p>
-        <div class="actions">
-          <button class="add-btn" onclick="addToCart('${product.id}')">Add to Cart</button>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
-}
-
-/* Add to cart (simple) */
-function addToCart(pid){
-  playClick();
-  const product = (growProducts.concat(designProducts)).find(p=>p.id===pid);
-  if (product){ cart.push(product); updateCartCount(); }
-}
-
-/* Cart UI */
-function updateCartCount(){ document.getElementById('cart-count').textContent = cart.length; }
-
+/* Open cart modal and render items + total */
 function openCart(){
   playClick();
   const modal = document.getElementById('cart-modal');
-  const items = document.getElementById('cart-items');
-  items.innerHTML = '';
-  if (cart.length === 0){
-    items.innerHTML = `<div style="color:#ddd;padding:12px">Your cart is empty.</div>`;
+  const items = document.getElementById('cart-items'); items.innerHTML = '';
+  if(cart.length===0){
+    items.innerHTML = `<div style="padding:18px;color:#ddd">Your cart is empty.</div>`;
+    document.getElementById('cart-total').textContent = 'Total: $0.00';
   } else {
-    // compute total (digit-by-digit / safe approach using parseFloat in loop)
-    let total = 0.0;
-    for (let i=0;i<cart.length;i++){
+    // compute total safely (digit-by-digit)
+    let total = 0;
+    for(let i=0;i<cart.length;i++){
       const p = parseFloat(cart[i].price);
-      if (!isNaN(p)) total += p;
-      const row = document.createElement('div');
-      row.className = 'checkout-item';
-      row.innerHTML = `<div>${cart[i].name}</div><div style="display:flex;gap:8px;align-items:center"><div>$${parseFloat(cart[i].price).toFixed(2)}</div><button style="background:none;border:none;color:#ff9bbd;cursor:pointer;font-weight:700" onclick="removeItem(${i})">✖</button></div>`;
+      if(!isNaN(p)) total += p;
+      const row = document.createElement('div'); row.className='checkout-item';
+      row.innerHTML = `<div style="font-weight:800">${cart[i].name}</div>
+        <div style="display:flex;gap:10px;align-items:center"><div style="font-weight:900">$${parseFloat(cart[i].price).toFixed(2)}</div>
+        <button style="background:none;border:none;color:#ff9bbd;cursor:pointer;font-weight:800" onclick="removeItem(${i})">✖</button></div>`;
       items.appendChild(row);
     }
     document.getElementById('cart-total').textContent = `Total: $${total.toFixed(2)}`;
@@ -534,49 +415,48 @@ function openCart(){
   modal.style.display = 'flex';
 }
 
+/* Close cart */
 function closeCart(){
   playClick();
   document.getElementById('cart-modal').style.display = 'none';
 }
 
+/* Remove item from cart */
 function removeItem(index){
   playClick();
-  if (index >=0 && index < cart.length) cart.splice(index,1);
+  if(index>=0 && index<cart.length) cart.splice(index,1);
   updateCartCount();
-  openCart(); // re-render modal
+  openCart();
 }
 
+/* Buy: redirect to DISCORD_INVITE (replace with your invite). Payment method is selectable but redirect is to the server link as requested. */
 function buyItems(){
   playClick();
-  if (cart.length === 0) { alert('Your cart is empty.'); return; }
-  // compute total safely
-  let total = 0.0;
-  for (let i=0;i<cart.length;i++){
-    const p = parseFloat(cart[i].price);
-    if (!isNaN(p)) total += p;
-  }
-  const totalStr = total.toFixed(2);
-
-  const proceed = confirm(`Total: $${totalStr}\n\nYou will be prompted to choose a payment method: PayPal or Roblox.\n\nPress OK to continue.`);
-  if (!proceed) return;
-
-  const method = prompt("Enter payment method ('paypal' or 'roblox')").trim().toLowerCase();
-  if (method === 'paypal') {
-    // placeholder redirect
-    window.location.href = 'https://paypal.me/your-paypal-link';
-  } else if (method === 'roblox') {
-    alert('Roblox payment selected. Follow the Roblox payment instructions in our Discord.');
-    // insert Roblox flow or instructions here
-  } else {
-    alert('Unknown payment method — purchase cancelled.');
-  }
+  if(cart.length===0){ alert('Your cart is empty.'); return; }
+  // calc total defensively
+  let total = 0;
+  for(let i=0;i<cart.length;i++){ const p=parseFloat(cart[i].price); if(!isNaN(p)) total+=p; }
+  const method = document.getElementById('payment-select').value;
+  const ok = confirm(`Total: $${total.toFixed(2)}\nPayment method: ${method}\n\nYou will be redirected to the Discord invite to complete claiming.`);
+  if(!ok) return;
+  // redirect to Discord invite (replace DISCORD_INVITE constant above with your link)
+  window.location.href = typeof DISCORD_INVITE === 'string' ? DISCORD_INVITE : 'https://discord.gg/your-invite-here';
 }
 
-/* startup: keep intro visible until selection */
-document.addEventListener('keydown', (e) => {
-  // optional: Esc goes back to intro if currently in content
-  if (e.key === 'Escape') resetIntro();
-});
+/* initial UI state */
+function init(){
+  // put categories (empty until selection)
+  renderCategories();
+  // link discord link to invite constant
+  const dl = document.getElementById('discord-link'); if(dl){
+    dl.href = typeof DISCORD_INVITE === 'string' ? DISCORD_INVITE : '#';
+    dl.target = '_blank';
+  }
+}
+init();
+
+/* keyboard: Esc returns to intro */
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') resetIntro(); });
 </script>
 </body>
 </html>
