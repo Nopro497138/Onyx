@@ -1,376 +1,582 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Onyx</title>
-  <link rel="icon" type="image/png" href="images/favicon.png" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(circle at top, #1a0033, #000011);
-      background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-      background-size: cover;
-      color: #fff;
-      animation: fadeIn 1s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    header {
-      background: linear-gradient(90deg, #6a00ff, #ff00aa);
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 12px rgba(255,0,255,0.4);
-    }
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: bold;
-      text-shadow: 0 0 8px #ff99ff;
-    }
-    .cart-button {
-      background: #fff;
-      color: #6a00ff;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .cart-button:hover {
-      background: #eee;
-    }
-    .warning-banner {
-      background: rgba(255,0,100,0.12);
-      border: 2px solid #ff0066;
-      color: #ffccdd;
-      padding: 15px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      box-shadow: 0 0 15px #ff0066;
-    }
-    .warning-banner a {
-      color: #ff99ff;
-      text-decoration: underline;
-    }
-    .container {
-      display: flex;
-    }
-    .sidebar {
-      background: rgba(20,0,40,0.8);
-      padding: 25px 15px;
-      width: 220px;
-      border-right: 2px solid #330066;
-      box-shadow: 0 0 10px #9900ff;
-    }
-    .sidebar button {
-      display: block;
-      width: 100%;
-      margin-bottom: 15px;
-      background: #6a00ff;
-      border: none;
-      color: white;
-      font-weight: bold;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-    .sidebar button:hover {
-      background: #9900ff;
-      transform: scale(1.05);
-    }
-    .products {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 30px;
-      padding: 50px;
-    }
-    .product {
-      background: rgba(40,0,70,0.9);
-      border: 2px solid #bb00ff;
-      padding: 30px;
-      border-radius: 16px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(200,0,255,0.5);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .product:hover {
-      transform: scale(1.04);
-      box-shadow: 0 0 30px #ff00ff;
-    }
-    .product img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      object-fit: cover;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.2));
-    }
-    .product h3 {
-      font-size: 24px;
-      margin: 20px 0 10px;
-    }
-    .product p {
-      font-size: 18px;
-      color: #ddd;
-      margin-bottom: 12px;
-    }
-    .product button {
-      font-size: 17px;
-      padding: 12px 20px;
-      background-color: #ff00ff;
-      color: #111;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    .product button:hover {
-      background-color: #cc00cc;
-    }
-    /* Checkout modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.8);
-    }
-    .modal-content {
-      background-color: rgba(30,0,50,0.95);
-      margin: 5% auto;
-      padding: 25px;
-      border: 2px solid #bb00ff;
-      width: 420px;
-      border-radius: 12px;
-      box-shadow: 0 0 25px #ff00ff;
-    }
-    .modal h2 {
-      margin-top: 0;
-      text-align: center;
-      color: #ff99ff;
-    }
-    .checkout-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(50,0,90,0.7);
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-    }
-    .remove-btn {
-      background: none;
-      color: #ff4d4d;
-      border: none;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    .checkout-footer {
-      margin-top: 20px;
-      text-align: center;
-      color: #fff;
-    }
-    .buy-btn {
-      padding: 10px 20px;
-      background: #ff00ff;
-      color: #111;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-right: 10px;
-    }
-    .buy-btn:hover {
-      background: #cc00cc;
-    }
-    .cancel-btn {
-      padding: 10px 20px;
-      background: #444;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .cancel-btn:hover {
-      background: #666;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Onyx — Animated Store</title>
+<link rel="icon" type="image/png" href="images/favicon.png" />
+<style>
+  /* Basic reset */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html,body { height: 100%; }
+
+  /* Background & canvas */
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at 20% 10%, rgba(110,0,255,0.12), transparent 10%),
+                radial-gradient(circle at 80% 80%, rgba(0,200,255,0.06), transparent 12%),
+                #000010;
+    color: #fff;
+    overflow: hidden;
+  }
+  #star-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  /* Subtle floating nebula layer */
+  .nebula {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(600px 400px at 10% 20%, rgba(120,0,255,0.06), transparent 10%),
+      radial-gradient(600px 400px at 90% 80%, rgba(0,120,255,0.05), transparent 10%);
+    mix-blend-mode: screen;
+    z-index: 0;
+    animation: nebmove 18s linear infinite;
+    opacity: 0.9;
+    filter: blur(20px);
+    pointer-events: none;
+  }
+  @keyframes nebmove {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.02); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  /* Page frame */
+  header {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 28px;
+    background: linear-gradient(90deg, rgba(110,0,255,0.14), rgba(255,0,170,0.08));
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    backdrop-filter: blur(4px);
+  }
+  header h1 {
+    font-size: 26px;
+    text-shadow: 0 0 12px rgba(180,100,255,0.12);
+    letter-spacing: 0.6px;
+  }
+  .cart-button {
+    background: linear-gradient(90deg,#fff,#f4f4f4);
+    color: #5c0088;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(150,0,200,0.08);
+    transition: transform .18s ease, box-shadow .18s;
+  }
+  .cart-button:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(150,0,200,0.12); }
+
+  /* Warning banner */
+  .warning-banner {
+    position: relative;
+    z-index: 3;
+    margin: 14px auto;
+    max-width: 1100px;
+    background: linear-gradient(90deg, rgba(255,20,100,0.08), rgba(255,80,140,0.03));
+    border: 1px solid rgba(255,0,100,0.18);
+    color: #ffd3e6;
+    padding: 12px 16px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    box-shadow: 0 6px 30px rgba(255,0,140,0.03);
+    z-index: 3;
+  }
+  .warning-banner a { color: #ffb5e0; text-decoration: underline; }
+
+  /* Layout */
+  .main {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 18px auto;
+    padding: 0 22px 80px;
+  }
+  .sidebar {
+    width: 240px;
+    background: rgba(10,4,20,0.45);
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid rgba(120,0,255,0.12);
+    box-shadow: 0 10px 30px rgba(20,0,60,0.5);
+    backdrop-filter: blur(6px);
+    transition: transform .28s cubic-bezier(.2,.9,.27,1);
+  }
+  .sidebar button {
+    display: block;
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(90deg,#7e00ff,#ff1599);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(140,0,255,0.12);
+    transition: transform .15s;
+  }
+  .sidebar button:hover { transform: translateY(-4px) scale(1.01); }
+
+  .products {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+    gap: 22px;
+  }
+
+  /* product card */
+  .product {
+    background: linear-gradient(180deg, rgba(40,6,70,0.7), rgba(10,4,20,0.6));
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid rgba(150,0,255,0.12);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    transform-origin: center;
+    animation: cardIn .6s ease both;
+    transition: transform .18s ease, box-shadow .18s;
+  }
+  @keyframes cardIn { from { transform: translateY(8px) scale(.98); opacity: 0 } to { transform: translateY(0) scale(1); opacity: 1 } }
+  .product:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 18px 48px rgba(170,0,255,0.18); }
+
+  .product img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    display:block;
+    margin-bottom: 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+  }
+  .product h3 { font-size: 18px; margin-bottom: 6px; }
+  .product p { color: #dcd6ff; margin-bottom: 10px; font-weight:600; }
+  .product .actions { display:flex; gap:10px; align-items:center; }
+  .add-btn {
+    flex:1;
+    background: linear-gradient(90deg,#ff66ff,#9c00ff);
+    color: #110017;
+    border:none;
+    padding:10px;
+    border-radius:10px;
+    font-weight:800;
+    cursor:pointer;
+    transition: transform .12s;
+  }
+  .add-btn:hover { transform: translateY(-3px); }
+
+  /* Intro overlay */
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, rgba(0,0,0,0.55), rgba(0,0,0,0.8));
+    backdrop-filter: blur(6px);
+    animation: introFade .6s ease;
+  }
+  @keyframes introFade { from { opacity: 0 } to { opacity: 1 } }
+
+  .intro-card {
+    width: min(760px, 92%);
+    background: linear-gradient(180deg, rgba(15,6,35,0.9), rgba(10,3,30,0.85));
+    border-radius: 16px;
+    padding: 34px;
+    text-align: center;
+    border: 1px solid rgba(150,0,255,0.12);
+    box-shadow: 0 18px 60px rgba(30,2,60,0.7);
+    transform-origin: center;
+    animation: popIn .5s cubic-bezier(.2,.9,.3,1);
+  }
+  @keyframes popIn { from { transform: scale(.96) translateY(8px); opacity:0 } to { transform: scale(1) translateY(0); opacity:1 } }
+
+  .intro h2 { font-size: 30px; margin-bottom: 18px; color: #ffd0ff; text-shadow: 0 0 10px rgba(255,150,255,0.06); }
+  .intro p { color: #dcd0ff; margin-bottom: 18px; font-weight:600; }
+
+  .choice-row { display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
+  .choice {
+    background: linear-gradient(180deg,#6b00ff,#ff2288);
+    color: white;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.04);
+    box-shadow: 0 10px 30px rgba(120,0,255,0.14);
+    transition: transform .14s ease;
+  }
+  .choice:hover { transform: translateY(-6px) scale(1.02); }
+
+  /* Modal (checkout) */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.85));
+    padding: 20px;
+    animation: modalFade .18s ease;
+  }
+  @keyframes modalFade { from { opacity: 0 } to { opacity: 1 } }
+  .modal-card {
+    width: 420px;
+    background: linear-gradient(180deg, rgba(20,4,60,0.95), rgba(10,3,35,0.95));
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid rgba(160,0,255,0.12);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    transform-origin: center;
+    animation: slideUp .28s cubic-bezier(.2,.9,.3,1);
+  }
+  @keyframes slideUp { from { transform: translateY(12px) scale(.98); opacity:0 } to { transform: translateY(0) scale(1); opacity:1 } }
+  .checkout-item { display:flex; justify-content:space-between; padding:8px 6px; margin-bottom:8px; border-radius:8px; background: rgba(255,255,255,0.02); }
+  .checkout-footer { margin-top:12px; display:flex; gap:10px; justify-content:space-between; align-items:center; }
+
+  .buy-btn { background: linear-gradient(90deg,#ff66ff,#9c00ff); color:#120017; border:none; padding:10px 14px; border-radius:8px; font-weight:800; cursor:pointer; }
+  .cancel-btn { background: rgba(255,255,255,0.06); color:#fff; border:none; padding:9px 12px; border-radius:8px; cursor:pointer; }
+
+  /* small screens */
+  @media (max-width:880px){
+    .main { flex-direction: column; padding-bottom: 160px; }
+    .sidebar { width:100%; display:flex; gap:10px; overflow-x:auto; padding-bottom:12px; }
+    .sidebar button { flex:0 0 auto; min-width:160px; }
+    .products { grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); }
+    .intro-card { padding: 22px; }
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>Onyx</h1>
-    <button class="cart-button" onclick="openCart()">🛒 Cart (<span id="cart-count">0</span>)</button>
-  </header>
 
-  <div class="warning-banner" role="alert" aria-live="polite">
-    ⚠️ To claim purchased items, you must join our <a href="#" id="discord-link">Discord server</a>!
-  </div>
+<canvas id="star-canvas"></canvas>
+<div class="nebula" aria-hidden="true"></div>
 
-  <div class="container">
-    <div class="sidebar">
-      <button onclick="showCategory('all')">All Products</button>
-      <button onclick="showCategory('category-1')">Category 1</button>
-      <button onclick="showCategory('category-2')">Category 2</button>
-      <button onclick="showCategory('category-3')">Category 3</button>
+<header>
+  <h1>Onyx</h1>
+  <button class="cart-button" onclick="openCart()">🛒 Cart (<span id="cart-count">0</span>)</button>
+</header>
+
+<div class="warning-banner" role="alert">
+  ⚠️ To claim purchased items, you must join our <a href="#" id="discord-link">Discord server</a>!
+</div>
+
+<!-- Intro overlay -->
+<div id="intro" class="intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+  <div class="intro-card">
+    <h2 id="intro-title">What are you looking for?</h2>
+    <p>Choose one to continue — the store will show the matching items.</p>
+    <div class="choice-row">
+      <button class="choice" onclick="selectMode('grow')">Grow a garden stuff</button>
+      <button class="choice" onclick="selectMode('design')">Server designing</button>
     </div>
-    <div class="products" id="products"></div>
+    <p style="margin-top:16px; color:#f1d9ff; font-size:13px;">(Everything is placeholder — you can swap products and images later)</p>
   </div>
+</div>
 
-  <!-- Checkout Modal -->
-  <div id="cart-modal" class="modal" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
-      <h2 id="checkout-title">Checkout</h2>
-      <div id="cart-items"></div>
-      <p id="cart-total">Total: $0.00</p>
-      <p>Payment methods: <strong>PayPal</strong> &amp; <strong>Roblox</strong></p>
-      <div class="checkout-footer">
-        <button class="buy-btn" onclick="buyItems()">Buy</button>
-        <button class="cancel-btn" onclick="closeCart()">Close</button>
+<!-- Main content -->
+<div class="main" id="main-content" aria-hidden="true">
+  <aside class="sidebar" aria-label="Categories">
+    <button onclick="showCategory('all')">All Products</button>
+    <button onclick="showCategory('featured')">Featured</button>
+    <button onclick="showCategory('placeholder')">Placeholder</button>
+    <button onclick="resetIntro()">Back to choices</button>
+  </aside>
+
+  <section class="products" id="products" aria-live="polite">
+    <!-- product cards injected here -->
+  </section>
+</div>
+
+<!-- Checkout modal -->
+<div id="cart-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+  <div class="modal-card">
+    <h3 id="checkout-title" style="color:#ffd0ff; margin-bottom:8px;">Checkout</h3>
+    <div id="cart-items" style="max-height:260px; overflow:auto; margin-bottom:8px;"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div style="color:#ddd;font-weight:700;">Payment methods: <span style="color:#ffd0ff">PayPal</span> &amp; <span style="color:#ffd0ff">Roblox</span></div>
+      <div id="cart-total" style="font-weight:900; color:#ffccff;">Total: $0.00</div>
+    </div>
+    <div class="checkout-footer">
+      <button class="buy-btn" onclick="buyItems()">Buy</button>
+      <button class="cancel-btn" onclick="closeCart()">Close</button>
+    </div>
+  </div>
+</div>
+
+<audio id="click-sound" src="click.mp3" preload="auto"></audio>
+
+<script>
+/* ----------------------------
+   Animated starfield (canvas)
+   ---------------------------- */
+const canvas = document.getElementById('star-canvas');
+const ctx = canvas.getContext('2d');
+let W = canvas.width = innerWidth;
+let H = canvas.height = innerHeight;
+
+window.addEventListener('resize', () => {
+  W = canvas.width = innerWidth;
+  H = canvas.height = innerHeight;
+  initStars();
+});
+
+let stars = [];
+const STAR_COUNT = Math.floor((window.innerWidth * window.innerHeight) / 30000) + 60;
+
+function rand(min,max){ return Math.random()*(max-min)+min; }
+
+function initStars(){
+  stars = [];
+  for(let i=0;i<STAR_COUNT;i++){
+    stars.push({
+      x: Math.random()*W,
+      y: Math.random()*H,
+      z: rand(0.2,1.2),
+      r: rand(0.3,1.6),
+      dx: rand(-0.03,0.03),
+      dy: rand(-0.02,0.02),
+      twinkle: Math.random()*1.6
+    });
+  }
+}
+initStars();
+
+let t = 0;
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  // soft glow gradient overlay (subtle)
+  const grad = ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0, 'rgba(255,100,200,0.01)');
+  grad.addColorStop(1, 'rgba(0,100,255,0.01)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,H);
+
+  // draw stars
+  for(let s of stars){
+    // twinkle effect
+    const tw = Math.sin(t*0.02*s.twinkle) * 0.6 + 0.8;
+    const size = s.r * tw * s.z;
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(255,255,255,${0.5 * s.z * tw})`;
+    ctx.arc(s.x, s.y, Math.max(0.2,size), 0, Math.PI*2);
+    ctx.fill();
+
+    // subtle motion
+    s.x += s.dx * (1 + 0.6*s.z);
+    s.y += s.dy * (1 + 0.6*s.z);
+
+    // wrap
+    if (s.x < -10) s.x = W + 10;
+    if (s.x > W + 10) s.x = -10;
+    if (s.y < -10) s.y = H + 10;
+    if (s.y > H + 10) s.y = -10;
+  }
+
+  t++;
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+/* ----------------------------
+   Products & modes
+   ---------------------------- */
+/* Two sets of placeholder products */
+const growProducts = [
+  { id: 'g1', name: 'Seed Pack (Placeholder)', price: '2.50', image: 'images/placeholder1.png' },
+  { id: 'g2', name: 'Magic Soil (Placeholder)', price: '4.00', image: 'images/placeholder2.png' },
+  { id: 'g3', name: 'Sun Lamp (Placeholder)', price: '8.75', image: 'images/placeholder3.png' },
+  { id: 'g4', name: 'Garden Bundle (Placeholder)', price: '12.00', image: 'images/placeholder4.png' }
+];
+
+const designProducts = [
+  { id: 'd1', name: 'Server Theme Pack (Placeholder)', price: '6.00', image: 'images/placeholder5.png' },
+  { id: 'd2', name: 'Icon Set (Placeholder)', price: '3.50', image: 'images/placeholder6.png' },
+  { id: 'd3', name: 'Banner Design (Placeholder)', price: '10.00', image: 'images/placeholder7.png' },
+  { id: 'd4', name: 'Full Server Kit (Placeholder)', price: '25.00', image: 'images/placeholder8.png' }
+];
+
+let productsData = []; // currently shown products
+let currentMode = null; // 'grow' or 'design'
+let cart = [];
+
+/* Utility: safe play click */
+function playClick(){
+  const audio = document.getElementById('click-sound');
+  if (audio && audio.play) {
+    try { audio.play(); } catch(e) { /* ignore play errors */ }
+  }
+}
+
+/* Intro selection */
+function selectMode(mode){
+  playClick();
+  currentMode = mode;
+  if (mode === 'grow') productsData = growProducts.slice();
+  else productsData = designProducts.slice();
+
+  // close intro & reveal main
+  const intro = document.getElementById('intro');
+  intro.style.display = 'none';
+  document.getElementById('main-content').setAttribute('aria-hidden','false');
+  renderProducts('all');
+}
+
+/* Back to intro */
+function resetIntro(){
+  playClick();
+  document.getElementById('intro').style.display = 'flex';
+  document.getElementById('main-content').setAttribute('aria-hidden','true');
+  productsData = [];
+  currentMode = null;
+  document.getElementById('products').innerHTML = '';
+}
+
+/* Render function */
+function renderProducts(filter = 'all'){
+  const container = document.getElementById('products');
+  container.innerHTML = '';
+  const list = (filter === 'all') ? productsData : productsData.filter(p => p.category === filter);
+  if (!list || list.length === 0) {
+    container.innerHTML = `<div style="color:#ddd;padding:28px;border-radius:12px;background:rgba(255,255,255,0.02)">No products in this view. Choose another category or go back.</div>`;
+    return;
+  }
+
+  list.forEach((product, i) => {
+    const card = document.createElement('div');
+    card.className = 'product';
+    card.style.animationDelay = `${i * 60}ms`;
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" />
+      <h3>${product.name}</h3>
+      <p>$${product.price}</p>
+      <div class="actions">
+        <button class="add-btn" onclick="addToCart('${product.id}')">Add to Cart</button>
       </div>
-    </div>
-  </div>
+    `;
+    container.appendChild(card);
+  });
+}
 
-  <audio id="click-sound" src="click.mp3" preload="auto"></audio>
-
-  <script>
-    // Placeholder products and categories
-    const productsData = [
-      { id: 1, name: "Placeholder Product 1", price: "5.00", category: "category-1", image: "images/placeholder1.png" },
-      { id: 2, name: "Placeholder Product 2", price: "7.50", category: "category-2", image: "images/placeholder2.png" },
-      { id: 3, name: "Placeholder Product 3", price: "12.00", category: "category-3", image: "images/placeholder3.png" },
-      { id: 4, name: "Placeholder Product 4", price: "3.00", category: "category-1", image: "images/placeholder4.png" }
-    ];
-
-    let cart = [];
-
-    function playClick() {
-      const audio = document.getElementById("click-sound");
-      if (audio && audio.play) {
-        // avoid errors if file missing
-        try { audio.play(); } catch(e) { /* ignore */ }
-      }
+/* Category shortcuts */
+function showCategory(key){
+  playClick();
+  if (!productsData || productsData.length === 0) return;
+  if (key === 'all') renderProducts('all');
+  else {
+    // placeholder logic: filter by id prefix for demo
+    const catList = productsData.filter(p => p.id.startsWith(key[0]) || key==='placeholder');
+    const container = document.getElementById('products');
+    container.innerHTML = '';
+    if (catList.length === 0) {
+      container.innerHTML = `<div style="color:#ddd;padding:28px;border-radius:12px;background:rgba(255,255,255,0.02)">No items found in this category.</div>`;
+      return;
     }
+    catList.forEach((product, i) => {
+      const card = document.createElement('div'); card.className='product';
+      card.style.animationDelay = `${i*60}ms`;
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" />
+        <h3>${product.name}</h3>
+        <p>$${product.price}</p>
+        <div class="actions">
+          <button class="add-btn" onclick="addToCart('${product.id}')">Add to Cart</button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+}
 
-    function showProducts(filter) {
-      const container = document.getElementById("products");
-      container.innerHTML = "";
-      const filtered = filter === "all" ? productsData : productsData.filter(p => p.category === filter);
-      filtered.forEach(product => {
-        const el = document.createElement("div");
-        el.classList.add("product");
-        el.innerHTML = `
-          <img src="${product.image}" alt="${product.name}">
-          <h3>${product.name}</h3>
-          <p>$${product.price}</p>
-          <button onclick="addToCart(${product.id}); playClick()">Add to Cart</button>
-        `;
-        container.appendChild(el);
-      });
+/* Add to cart (simple) */
+function addToCart(pid){
+  playClick();
+  const product = (growProducts.concat(designProducts)).find(p=>p.id===pid);
+  if (product){ cart.push(product); updateCartCount(); }
+}
+
+/* Cart UI */
+function updateCartCount(){ document.getElementById('cart-count').textContent = cart.length; }
+
+function openCart(){
+  playClick();
+  const modal = document.getElementById('cart-modal');
+  const items = document.getElementById('cart-items');
+  items.innerHTML = '';
+  if (cart.length === 0){
+    items.innerHTML = `<div style="color:#ddd;padding:12px">Your cart is empty.</div>`;
+  } else {
+    // compute total (digit-by-digit / safe approach using parseFloat in loop)
+    let total = 0.0;
+    for (let i=0;i<cart.length;i++){
+      const p = parseFloat(cart[i].price);
+      if (!isNaN(p)) total += p;
+      const row = document.createElement('div');
+      row.className = 'checkout-item';
+      row.innerHTML = `<div>${cart[i].name}</div><div style="display:flex;gap:8px;align-items:center"><div>$${parseFloat(cart[i].price).toFixed(2)}</div><button style="background:none;border:none;color:#ff9bbd;cursor:pointer;font-weight:700" onclick="removeItem(${i})">✖</button></div>`;
+      items.appendChild(row);
     }
+    document.getElementById('cart-total').textContent = `Total: $${total.toFixed(2)}`;
+  }
+  modal.style.display = 'flex';
+}
 
-    function showCategory(cat) {
-      playClick();
-      showProducts(cat);
-    }
+function closeCart(){
+  playClick();
+  document.getElementById('cart-modal').style.display = 'none';
+}
 
-    function addToCart(id) {
-      const product = productsData.find(p => p.id === id);
-      if (product) {
-        cart.push(product);
-        document.getElementById("cart-count").textContent = cart.length;
-      }
-    }
+function removeItem(index){
+  playClick();
+  if (index >=0 && index < cart.length) cart.splice(index,1);
+  updateCartCount();
+  openCart(); // re-render modal
+}
 
-    function openCart() {
-      playClick();
-      const cartItems = document.getElementById("cart-items");
-      cartItems.innerHTML = "";
-      let total = 0;
-      if (cart.length === 0) {
-        cartItems.innerHTML = '<p>Your cart is empty.</p>';
-      } else {
-        cart.forEach((item, index) => {
-          // calculate total (digit-by-digit safe approach)
-          total += parseFloat(item.price);
-          const div = document.createElement("div");
-          div.classList.add("checkout-item");
-          div.innerHTML = `
-            <span>${item.name} - $${item.price}</span>
-            <button class="remove-btn" onclick="removeItem(${index})" aria-label="Remove item">❌</button>
-          `;
-          cartItems.appendChild(div);
-        });
-      }
-      document.getElementById("cart-total").textContent = `Total: $${total.toFixed(2)}`;
-      const modal = document.getElementById("cart-modal");
-      modal.style.display = "block";
-      modal.setAttribute('aria-hidden', 'false');
-    }
+function buyItems(){
+  playClick();
+  if (cart.length === 0) { alert('Your cart is empty.'); return; }
+  // compute total safely
+  let total = 0.0;
+  for (let i=0;i<cart.length;i++){
+    const p = parseFloat(cart[i].price);
+    if (!isNaN(p)) total += p;
+  }
+  const totalStr = total.toFixed(2);
 
-    function closeCart() {
-      playClick();
-      const modal = document.getElementById("cart-modal");
-      modal.style.display = "none";
-      modal.setAttribute('aria-hidden', 'true');
-    }
+  const proceed = confirm(`Total: $${totalStr}\n\nYou will be prompted to choose a payment method: PayPal or Roblox.\n\nPress OK to continue.`);
+  if (!proceed) return;
 
-    function removeItem(index) {
-      playClick();
-      cart.splice(index, 1);
-      document.getElementById("cart-count").textContent = cart.length;
-      openCart();
-    }
+  const method = prompt("Enter payment method ('paypal' or 'roblox')").trim().toLowerCase();
+  if (method === 'paypal') {
+    // placeholder redirect
+    window.location.href = 'https://paypal.me/your-paypal-link';
+  } else if (method === 'roblox') {
+    alert('Roblox payment selected. Follow the Roblox payment instructions in our Discord.');
+    // insert Roblox flow or instructions here
+  } else {
+    alert('Unknown payment method — purchase cancelled.');
+  }
+}
 
-    function buyItems() {
-      playClick();
-      if (cart.length === 0) {
-        alert("Your cart is empty.");
-        return;
-      }
-
-      // compute total defensively (digit-by-digit)
-      let total = 0;
-      for (let i = 0; i < cart.length; i++) {
-        // parse price as float, ensure numerical addition
-        const p = parseFloat(cart[i].price);
-        if (!isNaN(p)) total += p;
-      }
-      const totalStr = total.toFixed(2);
-
-      const choice = confirm(`Total: $${totalStr}\n\nYou will be redirected to choose a payment method (PayPal or Roblox).\n\nClick OK to continue.`);
-      if (choice) {
-        // Example handling: show options (placeholder)
-        // Replace these with real payment flows if desired
-        const method = prompt("Enter payment method: 'paypal' or 'roblox'").toLowerCase();
-        if (method === 'paypal') {
-          // Redirect to PayPal link (placeholder)
-          window.location.href = "https://paypal.me/your-paypal-link";
-        } else if (method === 'roblox') {
-          // Redirect or show Roblox payment instructions (placeholder)
-          alert("Roblox payment chosen. Please follow the Roblox payment instructions in Discord.");
-        } else {
-          alert("Unknown payment method. Purchase cancelled.");
-        }
-      }
-    }
-
-    // initialize
-    showProducts("all");
-  </script>
+/* startup: keep intro visible until selection */
+document.addEventListener('keydown', (e) => {
+  // optional: Esc goes back to intro if currently in content
+  if (e.key === 'Escape') resetIntro();
+});
+</script>
 </body>
 </html>
