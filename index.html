@@ -12,7 +12,7 @@
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     color:#fff;
     background:#02000a;
-    overflow:auto; /* allow scrolling */
+    overflow:auto;
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
   }
@@ -33,62 +33,28 @@
   @keyframes nebTranslate{0%{transform:translateY(0)}50%{transform:translateY(-36px)}100%{transform:translateY(0)}}
   @keyframes nebSlowPulse{0%{opacity:0.98}50%{opacity:1}100%{opacity:0.98}}
 
-  .glossOverlay{
-    position:fixed;inset:0;z-index:0;pointer-events:none;
-    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0));
-    mix-blend-mode: overlay; opacity:0.45;
-  }
+  .glossOverlay{position:fixed;inset:0;z-index:0;pointer-events:none;background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0));mix-blend-mode: overlay; opacity:0.45;}
 
   /* ===== Layout & header ===== */
-  header{
-    position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:22px 36px;
-    background:linear-gradient(90deg, rgba(120,0,255,0.06), rgba(255,16,150,0.03));
-    border-bottom:1px solid rgba(255,255,255,0.02);
-    backdrop-filter: blur(6px);
-  }
+  header{position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:22px 36px;background:linear-gradient(90deg, rgba(120,0,255,0.06), rgba(255,16,150,0.03));border-bottom:1px solid rgba(255,255,255,0.02);backdrop-filter: blur(6px);}
   header h1{font-size:34px;letter-spacing:1px;color:#ffdffb;text-shadow:0 0 14px rgba(200,100,255,0.06)}
-  .cart-button{
-    display:inline-flex;align-items:center;gap:10px;
-    background:linear-gradient(90deg,#fff,#fafafa); color:#4a0066; border:none;
-    padding:12px 18px; border-radius:14px; font-weight:900; font-size:18px; cursor:pointer;
-    box-shadow:0 12px 36px rgba(160,0,220,0.08); transition: transform .18s ease, box-shadow .18s;
-  }
+  .cart-button{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(90deg,#fff,#fafafa); color:#4a0066; border:none;padding:12px 18px; border-radius:14px; font-weight:900; font-size:18px; cursor:pointer; box-shadow:0 12px 36px rgba(160,0,220,0.08); transition: transform .18s ease, box-shadow .18s;}
   .cart-button:hover{ transform:translateY(-4px); box-shadow:0 22px 48px rgba(170,0,220,0.12) }
   #cart-count{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,#ffd6ff,#ffc0ea);color:#140018;font-weight:900;transition:transform .25s ease}
 
-  /* claim banner */
-  .claim-banner{position:relative;z-index:5;margin:18px auto;max-width:1280px;padding:16px 20px;border-radius:14px;
-    border:1px solid rgba(255,0,120,0.12); background:linear-gradient(90deg, rgba(255,10,120,0.06), rgba(255,120,180,0.02));
-    text-align:center;font-weight:900;color:#ffd7ea; box-shadow:0 12px 40px rgba(255,0,140,0.03); animation: floatY 6s ease-in-out infinite;}
+  .claim-banner{position:relative;z-index:5;margin:18px auto;max-width:1280px;padding:16px 20px;border-radius:14px;border:1px solid rgba(255,0,120,0.12); background:linear-gradient(90deg, rgba(255,10,120,0.06), rgba(255,120,180,0.02)); text-align:center;font-weight:900;color:#ffd7ea; box-shadow:0 12px 40px rgba(255,0,140,0.03); animation: floatY 6s ease-in-out infinite;}
   @keyframes floatY{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
   .claim-banner a{color:#ffd0ff;text-decoration:underline}
 
-  /* main layout */
   .container{position:relative;z-index:4;max-width:1400px;margin:18px auto;padding:0 24px 80px;display:flex;gap:28px;align-items:start}
-  .sidebar{
-    width:320px;background:linear-gradient(180deg, rgba(12,4,30,0.75), rgba(6,2,20,0.7));
-    padding:22px;border-radius:16px;border:1px solid rgba(160,0,255,0.08);box-shadow:0 28px 90px rgba(10,0,40,0.7);
-    transform-origin:left center; animation: sidebarIn .6s both;
-  }
+  .sidebar{width:320px;background:linear-gradient(180deg, rgba(12,4,30,0.75), rgba(6,2,20,0.7));padding:22px;border-radius:16px;border:1px solid rgba(160,0,255,0.08);box-shadow:0 28px 90px rgba(10,0,40,0.7);transform-origin:left center; animation: sidebarIn .6s both;}
   @keyframes sidebarIn{from{transform:translateX(-10px) scale(.995);opacity:0}to{transform:none;opacity:1}}
-  .sidebar .cat-btn{
-    display:block;width:100%;margin-bottom:12px;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#7e00ff,#ff1599);
-    color:white;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 12px 36px rgba(140,0,255,0.12);transition:transform .14s, box-shadow .14s;
-  }
+  .sidebar .cat-btn{display:block;width:100%;margin-bottom:12px;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#7e00ff,#ff1599);color:white;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 12px 36px rgba(140,0,255,0.12);transition:transform .14s, box-shadow .14s;}
   .sidebar .cat-btn:hover{transform:translateY(-6px);box-shadow:0 18px 46px rgba(140,0,255,0.16)}
 
-  .products{
-    flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:28px;
-    align-content:start;
-  }
+  .products{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:28px;align-content:start;}
 
-  /* product card */
-  .product{
-    background:linear-gradient(180deg, rgba(40,8,80,0.92), rgba(6,2,20,0.9));
-    border-radius:16px;padding:20px;border:1px solid rgba(200,0,255,0.08);
-    box-shadow:0 28px 90px rgba(0,0,0,0.8);transition:transform .18s ease, box-shadow .18s ease, filter .18s;
-    transform-origin:center; animation: cardIn .55s cubic-bezier(.2,.9,.3,1) both;
-  }
+  .product{background:linear-gradient(180deg, rgba(40,8,80,0.92), rgba(6,2,20,0.9));border-radius:16px;padding:20px;border:1px solid rgba(200,0,255,0.08);box-shadow:0 28px 90px rgba(0,0,0,0.8);transition:transform .18s ease, box-shadow .18s ease, filter .18s;transform-origin:center; animation: cardIn .55s cubic-bezier(.2,.9,.3,1) both;}
   @keyframes cardIn{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
   .product:hover{transform:translateY(-10px) scale(1.02); box-shadow:0 44px 130px rgba(180,0,255,0.18); filter:brightness(1.03)}
 
@@ -96,65 +62,34 @@
   .product h3{font-size:20px;margin-bottom:6px}
   .product .price{font-size:18px;color:#ffdff4;font-weight:900;margin-bottom:12px}
   .product .actions{display:flex;gap:12px;align-items:center}
-  .add-btn{
-    flex:1;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#ff66ff,#9c00ff);
-    color:#110018;font-weight:900;font-size:17px;cursor:pointer;transition:transform .12s;
-  }
+  .add-btn{flex:1;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#ff66ff,#9c00ff);color:#110018;font-weight:900;font-size:17px;cursor:pointer;transition:transform .12s;}
   .add-btn:hover{transform:translateY(-6px)}
-  /* entrance for buttons */
   .big-btn { padding:14px 18px; border-radius:12px; font-weight:900; }
 
-  /* intro overlay */
-  .intro{
-    position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;
-    background:radial-gradient(circle at center, rgba(0,0,0,0.6), rgba(0,0,0,0.88));backdrop-filter:blur(8px);
-  }
-  .intro-card{
-    width:min(920px,96%);padding:40px;border-radius:18px;background:linear-gradient(180deg,rgba(16,6,38,0.98),rgba(8,3,30,0.99));
-    border:1px solid rgba(220,150,255,0.04);box-shadow:0 40px 140px rgba(4,0,20,0.9);
-  }
+  .intro{position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center, rgba(0,0,0,0.6), rgba(0,0,0,0.88));backdrop-filter:blur(8px);}
+  .intro-card{width:min(920px,96%);padding:40px;border-radius:18px;background:linear-gradient(180deg,rgba(16,6,38,0.98),rgba(8,3,30,0.99));border:1px solid rgba(220,150,255,0.04);box-shadow:0 40px 140px rgba(4,0,20,0.9);}
   .intro h2{font-size:40px;margin-bottom:10px;color:#ffdffb}
   .choices{display:flex;gap:26px;justify-content:center;margin-top:22px;flex-wrap:wrap}
-  .choice{
-    background:linear-gradient(90deg,#6b00ff,#ff2288); padding:18px 26px;border-radius:16px;color:white;font-weight:900;font-size:20px;cursor:pointer;
-    border:2px solid rgba(255,255,255,0.03);transition:transform .14s;
-  }
+  .choice{background:linear-gradient(90deg,#6b00ff,#ff2288); padding:18px 26px;border-radius:16px;color:white;font-weight:900;font-size:20px;cursor:pointer;border:2px solid rgba(255,255,255,0.03);transition:transform .14s;}
   .choice:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 20px 60px rgba(150,0,255,0.12)}
 
-  /* modal / checkout */
   .modal{position:fixed;inset:0;z-index:12;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.92));padding:26px}
   .modal-card{width:680px;background:linear-gradient(180deg, rgba(18,6,60,0.97), rgba(10,3,40,0.98));border-radius:16px;padding:20px;border:1px solid rgba(200,0,255,0.12);box-shadow:0 44px 140px rgba(0,0,0,0.95)}
   .checkout-item{display:flex;justify-content:space-between;padding:12px;border-radius:12px;background:rgba(255,255,255,0.02);margin-bottom:10px}
   .checkout-footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
 
-  /* unified nice buttons */
-  .btn-primary{
-    background:linear-gradient(90deg,#ff66ff,#9c00ff);
-    color:#120018;border:none;padding:14px 20px;border-radius:12px;font-weight:900;font-size:18px;cursor:pointer;
-    box-shadow:0 18px 50px rgba(200,0,255,0.12);transition:transform .14s,box-shadow .14s;
-  }
+  .btn-primary{background:linear-gradient(90deg,#ff66ff,#9c00ff);color:#120018;border:none;padding:14px 20px;border-radius:12px;font-weight:900;font-size:18px;cursor:pointer;box-shadow:0 18px 50px rgba(200,0,255,0.12);transition:transform .14s,box-shadow .14s;}
   .btn-primary:hover{transform:translateY(-6px);box-shadow:0 28px 80px rgba(200,0,255,0.16)}
-  .btn-secondary{
-    background:linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-    color:#fff;border:none;padding:12px 16px;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;
-    box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:transform .12s;
-  }
+  .btn-secondary{background:linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));color:#fff;border:none;padding:12px 16px;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:transform .12s;}
   .btn-secondary:hover{transform:translateY(-5px)}
 
-  /* payment pills */
   .payment-pills{display:flex;gap:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:6px;border-radius:999px;align-items:center}
   .pill{padding:10px 16px;border-radius:999px;border:none;background:transparent;color:#ddd;font-weight:800;cursor:pointer;transition:all .15s}
   .pill.active{background:linear-gradient(90deg,#ffd1ff,#ff9bdc);color:#140018;box-shadow:0 10px 28px rgba(200,0,255,0.12);transform:translateY(-4px)}
 
-  /* flying star and trail */
   .fly-star{position:fixed;z-index:50;font-size:30px;pointer-events:none;text-shadow:0 6px 18px rgba(200,80,255,0.18),0 0 36px rgba(120,240,255,0.06)}
   .trail{position:fixed;z-index:49;font-size:14px;pointer-events:none;opacity:0.95;filter:blur(.6px);}
 
-  /* micro animations */
-  .pulse{animation:pulseScale 1.2s infinite}
-  @keyframes pulseScale{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
-
-  /* responsive */
   @media (max-width:1100px){
     .container{flex-direction:column;padding-bottom:120px}
     .sidebar{width:100%;display:flex;gap:10px;overflow-x:auto}
@@ -173,6 +108,7 @@
   const DISCORD_INVITE = "https://discord.gg/qZvny4sWZs";
 
   // Products for "Grow a garden stuff" mode
+  // You asked to have two simple arrays — edit these only
   const productsGarden = {
     all: [
       { id: "g1", name: "Placeholder Product 1", price: "2.50", img: null },
@@ -203,6 +139,10 @@
       { id: "s6", name: "Placeholder Product 12", price: "25.00", img: null }
     ]
   };
+
+  // expose to window for safety (optional) so both access patterns work
+  window.productsGarden = productsGarden;
+  window.productsServer = productsServer;
 </script>
 
 <!-- Canvas + nebula overlays -->
@@ -269,7 +209,7 @@
   </div>
 </div>
 
-<!-- sound -->
+<!-- optional sound -->
 <audio id="click-sound" src="click.mp3" preload="auto"></audio>
 
 <script>
@@ -278,8 +218,7 @@
    =========================== */
 const canvas = document.getElementById('star-canvas');
 const ctx = canvas.getContext('2d');
-let W = canvas.width = innerWidth;
-let H = canvas.height = innerHeight;
+let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
 window.addEventListener('resize', ()=>{ W = canvas.width = innerWidth; H = canvas.height = innerHeight; initStars(); });
 
 function rand(a,b){ return Math.random()*(b-a)+a; }
@@ -336,68 +275,65 @@ requestAnimationFrame(draw);
    Application state & helpers
    =========================== */
 
-/* Mode data references to arrays defined earlier in <script> scope */
 let mode = null; // 'garden' or 'server'
 let cart = [];
 let selectedPayment = 'paypal';
 
-/* Utilities */
-function playClick(){
-  const a = document.getElementById('click-sound'); if(a && a.play){ try{ a.play(); }catch(e){} }
-}
-function dataURLPlaceholder(text,width=900,height=600,bg='#1e0b2a',fg='#ffdff8'){
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}'>
-    <rect width='100%' height='100%' fill='${bg}' rx='12'/>
-    <g font-family='Segoe UI, Tahoma, Verdana' font-weight='800' fill='${fg}' font-size='36' text-anchor='middle'>
-      <text x='50%' y='50%'>${text}</text>
-    </g>
-  </svg>`;
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
-}
+function playClick(){ const a = document.getElementById('click-sound'); if(a && a.play){ try{ a.play(); }catch(e){} } }
+function dataURLPlaceholder(text,width=900,height=600,bg='#1e0b2a',fg='#ffdff8'){ const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}'><rect width='100%' height='100%' fill='${bg}' rx='12'/><g font-family='Segoe UI, Tahoma, Verdana' font-weight='800' fill='${fg}' font-size='36' text-anchor='middle'><text x='50%' y='50%'>${text}</text></g></svg>`; return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); }
 
-/* Grab reference to the product data arrays (global scope) */
+/* Return the correct product object for the selected mode.
+   Accept both direct variables (productsGarden) and window.* forms for compatibility. */
 function getProductsForMode(currentMode){
-  if(currentMode === 'garden') return window.productsGarden || { all: [] };
-  if(currentMode === 'server') return window.productsServer || { all: [] };
+  // prefer direct variables if available
+  if(currentMode === 'garden'){
+    if(typeof productsGarden !== 'undefined') return productsGarden;
+    if(typeof window !== 'undefined' && window.productsGarden) return window.productsGarden;
+    return { all: [] };
+  }
+  if(currentMode === 'server'){
+    if(typeof productsServer !== 'undefined') return productsServer;
+    if(typeof window !== 'undefined' && window.productsServer) return window.productsServer;
+    return { all: [] };
+  }
   return { all: [] };
 }
 
-/* Render categories into sidebar (show 'All Products' label for key 'all') */
+/* Render categories in sidebar (show 'All Products' label for key 'all') */
 function renderCategories(){
   const catList = document.getElementById('category-list');
   catList.innerHTML = '';
-  // back button
-  const back = document.createElement('button'); back.className='cat-btn'; back.textContent='Back to choices';
-  back.onclick = resetIntro; catList.appendChild(back);
+  const back = document.createElement('button'); back.className='cat-btn'; back.textContent='Back to choices'; back.onclick = resetIntro; catList.appendChild(back);
 
   if(!mode) return;
   const data = getProductsForMode(mode);
   const cats = Object.keys(data || {});
+  // make sure 'all' appears as the first button (if present)
+  cats.sort((a,b)=>{
+    if(a.toLowerCase()==='all') return -1;
+    if(b.toLowerCase()==='all') return 1;
+    return a.localeCompare(b);
+  });
   cats.forEach(cat => {
     const b = document.createElement('button');
     b.className = 'cat-btn';
-    // display nicer label for 'all'
-    b.textContent = (cat.toLowerCase() === 'all') ? 'All Products' : cat;
-    // pass the real key to showProducts (case-sensitive as in data)
+    b.textContent = (String(cat).toLowerCase() === 'all') ? 'All Products' : cat;
     b.onclick = ()=>{ playClick(); showProducts(cat); };
     catList.appendChild(b);
   });
 }
 
-/* Show products for a category (use key 'all' for All Products) */
+/* Show products for a category key (supports 'all' key and case-insensitive matches) */
 function showProducts(categoryKey){
   const container = document.getElementById('products');
   container.innerHTML = '';
   const data = getProductsForMode(mode);
   if(!data) return;
   let items = [];
-  // Allow categoryKey to be 'all' or actual category names
   if(!categoryKey) categoryKey = 'all';
-  // normalize keys: try exact match, then lowercase match
   if(data[categoryKey] !== undefined){
     items = data[categoryKey];
   } else {
-    // try to find case-insensitive match
     const foundKey = Object.keys(data).find(k => k.toLowerCase() === String(categoryKey).toLowerCase());
     if(foundKey) items = data[foundKey];
     else items = [];
@@ -407,17 +343,11 @@ function showProducts(categoryKey){
     container.innerHTML = `<div style="padding:20px;border-radius:12px;background:rgba(255,255,255,0.02);color:#ddd">No items</div>`;
     return;
   }
+
   items.forEach((p, idx) => {
     const card = document.createElement('div'); card.className='product';
     const imgSrc = p.img || dataURLPlaceholder('Image');
-    card.innerHTML = `
-      <img src="${imgSrc}" alt="${p.name}">
-      <h3>${p.name}</h3>
-      <div class="price">$${parseFloat(p.price).toFixed(2)}</div>
-      <div class="actions">
-        <button class="add-btn big-btn" data-id="${p.id}">Add to Cart</button>
-      </div>
-    `;
+    card.innerHTML = `<img src="${imgSrc}" alt="${p.name}"><h3>${p.name}</h3><div class="price">$${parseFloat(p.price).toFixed(2)}</div><div class="actions"><button class="add-btn big-btn" data-id="${p.id}">Add to Cart</button></div>`;
     container.appendChild(card);
     const btn = card.querySelector('.add-btn');
     const imgEl = card.querySelector('img');
@@ -428,11 +358,11 @@ function showProducts(categoryKey){
 /* Intro selection */
 function selectMode(selected){
   playClick();
-  mode = selected; // 'garden' or 'server'
+  mode = selected; // 'garden' | 'server'
   document.getElementById('intro').style.display = 'none';
   document.getElementById('main-content').setAttribute('aria-hidden','false');
   renderCategories();
-  // show 'all' key by default
+  // show 'all' (key 'all') by default if present
   showProducts('all');
 }
 
@@ -466,9 +396,7 @@ function openCart(){
       const p = parseFloat(cart[i].price);
       if(!isNaN(p)) total += p;
       const row = document.createElement('div'); row.className='checkout-item';
-      row.innerHTML = `<div style="font-weight:900">${cart[i].name}</div>
-        <div style="display:flex;gap:12px;align-items:center"><div style="font-weight:900">$${parseFloat(cart[i].price).toFixed(2)}</div>
-        <button style="background:none;border:none;color:#ff9bbd;cursor:pointer;font-weight:900" onclick="removeItem(${i})">✖</button></div>`;
+      row.innerHTML = `<div style="font-weight:900">${cart[i].name}</div><div style="display:flex;gap:12px;align-items:center"><div style="font-weight:900">$${parseFloat(cart[i].price).toFixed(2)}</div><button style="background:none;border:none;color:#ff9bbd;cursor:pointer;font-weight:900" onclick="removeItem(${i})">✖</button></div>`;
       items.appendChild(row);
     }
     document.getElementById('cart-total').textContent = `Total: $${total.toFixed(2)}`;
@@ -478,28 +406,13 @@ function openCart(){
 function closeCart(){ playClick(); document.getElementById('cart-modal').style.display = 'none'; }
 function removeItem(i){ playClick(); if(i>=0 && i<cart.length) cart.splice(i,1); updateCartCount(); openCart(); }
 
-/* payment selection (pills) */
-function selectPayment(btn){
-  playClick();
-  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  selectedPayment = btn.getAttribute('data-val');
-}
+/* payment selection */
+function selectPayment(btn){ playClick(); document.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); btn.classList.add('active'); selectedPayment = btn.getAttribute('data-val'); }
 
-/* BUY — direct redirect to DISCORD_INVITE (no alert) */
-function buyItems(){
-  playClick();
-  if(cart.length === 0){ closeCart(); return; }
-  // compute total safely
-  let total = 0;
-  for(let i=0;i<cart.length;i++){ const p=parseFloat(cart[i].price); if(!isNaN(p)) total += p; }
-  // redirect to invite
-  window.location.href = (typeof DISCORD_INVITE === 'string') ? DISCORD_INVITE : 'https://discord.gg/qZvny4sWZs';
-}
+/* buy: direct redirect to DISCORD_INVITE */
+function buyItems(){ playClick(); if(cart.length === 0){ closeCart(); return; } window.location.href = (typeof DISCORD_INVITE === 'string') ? DISCORD_INVITE : 'https://discord.gg/qZvny4sWZs'; }
 
-/* =============================
-   Add-to-cart animation with star + trail
-   ============================= */
+/* add-to-cart animation */
 function animateAddToCartAndAdd(product, imgEl){
   playClick();
   const imgRect = imgEl.getBoundingClientRect();
@@ -568,31 +481,28 @@ function animateAddToCartAndAdd(product, imgEl){
   }, 920);
 }
 
-/* =============================
-   Initialization
-   ============================= */
+/* init */
 function init(){
-  // auto-fill 'all' if empty
-  if(Array.isArray(window.productsGarden?.all) && window.productsGarden.all.length === 0){
-    for(const k of Object.keys(window.productsGarden)){
-      if(k === 'all') continue;
-      window.productsGarden.all = window.productsGarden.all.concat(window.productsGarden[k] || []);
+  // auto-fill 'all' if empty (merge categories into 'all' if user left it)
+  try {
+    if(typeof productsGarden !== 'undefined' && Array.isArray(productsGarden.all) && productsGarden.all.length === 0){
+      for(const k of Object.keys(productsGarden)){
+        if(k === 'all') continue;
+        productsGarden.all = productsGarden.all.concat(productsGarden[k] || []);
+      }
     }
-  }
-  if(Array.isArray(window.productsServer?.all) && window.productsServer.all.length === 0){
-    for(const k of Object.keys(window.productsServer)){
-      if(k === 'all') continue;
-      window.productsServer.all = window.productsServer.all.concat(window.productsServer[k] || []);
+    if(typeof productsServer !== 'undefined' && Array.isArray(productsServer.all) && productsServer.all.length === 0){
+      for(const k of Object.keys(productsServer)){
+        if(k === 'all') continue;
+        productsServer.all = productsServer.all.concat(productsServer[k] || []);
+      }
     }
-  }
+  } catch(e){ /* ignore */ }
 
-  // set discord link
+  // populate discord link
   const dl = document.getElementById('discord-link'); if(dl){ dl.href = DISCORD_INVITE; dl.target = '_blank'; }
 
-  // initial categories (empty)
   renderCategories();
-
-  // Esc to intro
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') resetIntro(); });
 }
 init();
