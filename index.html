@@ -19,7 +19,6 @@
 
   /* ========= Cosmos Background ========= */
   #star-canvas{position:fixed;inset:0;z-index:0;display:block}
-  /* Brighter, more visible nebula */
   .nebula{
     position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
@@ -73,48 +72,48 @@
   .container{
     position:relative;z-index:4;
     max-width:1400px;margin:14px auto 80px;padding:0 24px;
-    display:flex;gap:28px;align-items:flex-start;
+    display:flex;gap:28px;align-items:stretch; /* stretch makes sidebar height match products */
   }
   .sidebar{
-    width:330px;min-width:280px;
-    background:linear-gradient(180deg, rgba(16,6,38,.85), rgba(8,3,30,.85));
-    padding:22px;border-radius:18px;
+    width:240px;min-width:220px; /* slimmer */
+    background:linear-gradient(180deg, rgba(16,6,38,.88), rgba(8,3,30,.9));
+    padding:16px;border-radius:18px;
     border:1px solid rgba(220,150,255,.12);
     box-shadow:0 28px 100px rgba(0,0,0,.6);
-    transform-origin:left center;animation: sidebarIn .6s both;
+    display:flex;flex-direction:column;gap:10px;
+    overflow:auto; /* own scroll if needed */
   }
-  @keyframes sidebarIn{from{transform:translateX(-10px) scale(.995);opacity:0}to{transform:none;opacity:1}}
   .cat-btn{
-    display:block;width:100%;margin-bottom:12px;padding:16px 16px;border:none;border-radius:14px;
+    display:block;width:100%;padding:14px 14px;border:none;border-radius:12px;
     background:linear-gradient(90deg,#7e00ff,#ff1599);
-    color:#fff;font-weight:900;font-size:18px;cursor:pointer;
-    box-shadow:0 14px 42px rgba(140,0,255,.18);
+    color:#fff;font-weight:900;font-size:16px;cursor:pointer;
+    box-shadow:0 12px 36px rgba(140,0,255,.16);
     transition:transform .14s, box-shadow .14s, filter .14s;
   }
   .cat-btn:hover{transform:translateY(-6px);box-shadow:0 20px 56px rgba(140,0,255,.22);filter:brightness(1.04)}
 
   .products{
-    flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
-    gap:28px;align-content:start;padding-bottom:40px;
+    flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:24px;align-content:start;padding-bottom:40px;
   }
   .product{
     background:linear-gradient(180deg, rgba(40,8,80,.92), rgba(6,2,20,.92));
     border:1px solid rgba(200,0,255,.12);
-    border-radius:18px;padding:22px;
+    border-radius:18px;padding:20px;
     box-shadow:0 30px 100px rgba(0,0,0,.75);
     transition:transform .18s, box-shadow .18s, filter .18s;
     transform-origin:center;animation: cardIn .55s cubic-bezier(.2,.9,.3,1) both;
   }
   @keyframes cardIn{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
   .product:hover{transform:translateY(-10px) scale(1.02);box-shadow:0 44px 130px rgba(180,0,255,.18);filter:brightness(1.03)}
-  .product img{width:100%;height:240px;object-fit:cover;border-radius:14px;margin-bottom:14px;background:linear-gradient(180deg,#1a0b26,#0b0712)}
-  .product h3{font-size:22px;margin-bottom:6px}
-  .product .price{font-size:19px;color:#ffdff4;font-weight:900;margin-bottom:12px}
-  .actions{display:flex;gap:12px;align-items:center}
+  .product img{width:100%;height:220px;object-fit:cover;border-radius:14px;margin-bottom:12px;background:linear-gradient(180deg,#1a0b26,#0b0712)}
+  .product h3{font-size:20px;margin-bottom:6px}
+  .product .price{font-size:18px;color:#ffdff4;font-weight:900;margin-bottom:10px}
+  .actions{display:flex;gap:10px;align-items:center}
   .add-btn{
-    flex:1;padding:14px;border-radius:14px;border:none;
+    flex:1;padding:12px;border-radius:12px;border:none;
     background:linear-gradient(90deg,#ff66ff,#9c00ff);
-    color:#120018;font-weight:900;font-size:18px;cursor:pointer;transition:transform .12s;
+    color:#120018;font-weight:900;font-size:16px;cursor:pointer;transition:transform .12s;
   }
   .add-btn:hover{transform:translateY(-6px)}
 
@@ -125,7 +124,7 @@
   .choices{display:flex;gap:26px;justify-content:center;margin-top:24px;flex-wrap:wrap}
   .choice{
     background:linear-gradient(90deg,#6b00ff,#ff2288);
-    padding:20px 30px;border-radius:16px;color:#fff;font-weight:900;font-size:22px;
+    padding:18px 26px;border-radius:16px;color:#fff;font-weight:900;font-size:20px;
     cursor:pointer;border:2px solid rgba(255,255,255,.04);transition:transform .14s, box-shadow .14s;
     box-shadow:0 20px 60px rgba(150,0,255,.16);
   }
@@ -163,8 +162,8 @@
 
   /* ========= Responsive ========= */
   @media (max-width:1100px){
-    .container{flex-direction:column;padding-bottom:120px}
-    .sidebar{width:100%;min-width:unset;display:flex;gap:10px;overflow-x:auto}
+    .container{flex-direction:column;padding-bottom:120px;align-items:stretch}
+    .sidebar{width:100%;min-width:unset;display:flex;gap:10px;overflow-x:auto;overflow-y:hidden}
     .products{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
     .product img{height:180px}
     .modal-card{width:94%}
@@ -176,10 +175,8 @@
 
 <!-- =================== CONFIG: Edit only these arrays to change products =================== -->
 <script>
-  // Your Discord invite for the Buy action:
   const DISCORD_INVITE = "https://discord.gg/qZvny4sWZs";
 
-  // "Grow a garden stuff" mode
   const productsGarden = {
     all: [
       { id: "g1", name: "Placeholder Product 1", price: "2.50", img: null },
@@ -198,7 +195,6 @@
     ]
   };
 
-  // "Server designing" mode
   const productsServer = {
     all: [
       { id: "s1", name: "Placeholder Product 8", price: "6.00", img: null },
@@ -213,7 +209,6 @@
     ]
   };
 
-  // (Optional) also expose on window
   window.productsGarden = productsGarden;
   window.productsServer = productsServer;
 </script>
@@ -370,20 +365,18 @@ function renderCategories(){
   back.onclick = resetIntro;
   catList.appendChild(back);
 
-  // Always show explicit "All Products"
   const allBtn = document.createElement('button');
   allBtn.className='cat-btn';
   allBtn.textContent='All Products';
   allBtn.onclick = ()=>{ playClick(); showProducts('__ALL__'); };
   catList.appendChild(allBtn);
 
-  // Then the real placeholder categories (excluding possible "all")
   const data = getData();
   Object.keys(data||{}).forEach(key=>{
     if(key==='all') return;
     const b = document.createElement('button');
     b.className='cat-btn';
-    b.textContent = key; // already "Placeholder X"
+    b.textContent = key; // Placeholder names
     b.onclick = ()=>{ playClick(); showProducts(key); };
     catList.appendChild(b);
   });
@@ -402,7 +395,6 @@ function showProducts(categoryKey){
   } else if(categoryKey && (data[categoryKey] !== undefined)) {
     items = data[categoryKey];
   } else if(String(categoryKey).toLowerCase()==='all'){
-    // If someone still calls 'all', aggregate to be safe:
     items = getAllAggregated(data);
   } else {
     items = [];
@@ -438,7 +430,6 @@ function selectMode(selected){
   document.getElementById('intro').style.display = 'none';
   document.getElementById('main-content').setAttribute('aria-hidden','false');
   renderCategories();
-  // Default to explicit "All Products" aggregation
   showProducts('__ALL__');
 }
 function resetIntro(){
@@ -491,7 +482,6 @@ function selectPayment(btn){
 function buyItems(){
   playClick();
   if(cart.length === 0){ closeCart(); return; }
-  // No alert, direct redirect:
   window.location.href = DISCORD_INVITE;
 }
 
@@ -513,7 +503,6 @@ function animateAddToCartAndAdd(product, imgEl){
   star.style.transform = 'translate(-50%,-50%) scale(1)';
   star.style.opacity = '1';
   star.innerHTML = '⭐';
-  // match nebula tint
   star.style.color = '#ffb0ee';
   star.style.textShadow = '0 6px 18px rgba(255,140,220,.22), 0 0 36px rgba(120,240,255,.10)';
   document.body.appendChild(star);
@@ -567,7 +556,6 @@ function animateAddToCartAndAdd(product, imgEl){
 
 /* ===== Init ===== */
 function init(){
-  // Fill explicit All Products button behavior, show intro
   const dl = document.getElementById('discord-link'); if(dl){ dl.href = DISCORD_INVITE; dl.target='_blank'; }
   renderCategories();
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') resetIntro(); });
