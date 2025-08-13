@@ -173,7 +173,6 @@
   const DISCORD_INVITE = "https://discord.gg/qZvny4sWZs";
 
   // Products for "Grow a garden stuff" mode
-  // Structure: keys = categories; key 'all' = all products (fill manually or auto-fill)
   const productsGarden = {
     all: [
       { id: "g1", name: "Placeholder Product 1", price: "2.50", img: null },
@@ -363,7 +362,7 @@ function getProductsForMode(currentMode){
   return { all: [] };
 }
 
-/* Render categories into sidebar (category labels are placeholders as requested) */
+/* Render categories into sidebar (show 'All Products' label for key 'all') */
 function renderCategories(){
   const catList = document.getElementById('category-list');
   catList.innerHTML = '';
@@ -377,21 +376,32 @@ function renderCategories(){
   cats.forEach(cat => {
     const b = document.createElement('button');
     b.className = 'cat-btn';
-    b.textContent = cat;
+    // display nicer label for 'all'
+    b.textContent = (cat.toLowerCase() === 'all') ? 'All Products' : cat;
+    // pass the real key to showProducts (case-sensitive as in data)
     b.onclick = ()=>{ playClick(); showProducts(cat); };
     catList.appendChild(b);
   });
 }
 
-/* Show products for a category (or All) */
+/* Show products for a category (use key 'all' for All Products) */
 function showProducts(categoryKey){
   const container = document.getElementById('products');
   container.innerHTML = '';
   const data = getProductsForMode(mode);
   if(!data) return;
   let items = [];
-  if(!categoryKey || categoryKey === 'all' || categoryKey === 'All Products') items = data['all'] || [];
-  else items = data[categoryKey] || [];
+  // Allow categoryKey to be 'all' or actual category names
+  if(!categoryKey) categoryKey = 'all';
+  // normalize keys: try exact match, then lowercase match
+  if(data[categoryKey] !== undefined){
+    items = data[categoryKey];
+  } else {
+    // try to find case-insensitive match
+    const foundKey = Object.keys(data).find(k => k.toLowerCase() === String(categoryKey).toLowerCase());
+    if(foundKey) items = data[foundKey];
+    else items = [];
+  }
 
   if(!items || items.length === 0){
     container.innerHTML = `<div style="padding:20px;border-radius:12px;background:rgba(255,255,255,0.02);color:#ddd">No items</div>`;
@@ -422,7 +432,8 @@ function selectMode(selected){
   document.getElementById('intro').style.display = 'none';
   document.getElementById('main-content').setAttribute('aria-hidden','false');
   renderCategories();
-  showProducts('All Products'); // show All products by default
+  // show 'all' key by default
+  showProducts('all');
 }
 
 /* reset intro */
@@ -488,13 +499,9 @@ function buyItems(){
 
 /* =============================
    Add-to-cart animation with star + trail
-   - star tinted to nebula colors
-   - multiple small flake trail elements
-   - after animation, add item to cart & update badge
    ============================= */
 function animateAddToCartAndAdd(product, imgEl){
   playClick();
-  // get start & end positions
   const imgRect = imgEl.getBoundingClientRect();
   const startX = imgRect.left + imgRect.width/2;
   const startY = imgRect.top + imgRect.height/2;
@@ -503,20 +510,17 @@ function animateAddToCartAndAdd(product, imgEl){
   const endX = cartRect.left + cartRect.width/2;
   const endY = cartRect.top + cartRect.height/2;
 
-  // create main star
   const star = document.createElement('div');
   star.className = 'fly-star';
   star.style.left = startX + 'px';
   star.style.top = startY + 'px';
   star.style.transform = 'translate(-50%,-50%) scale(1)';
   star.style.opacity = '1';
-  // color to match nebula (pink -> purple -> cyan)
   star.innerHTML = '⭐';
   star.style.color = '#ffa3e9';
   star.style.textShadow = '0 6px 18px rgba(255,140,220,0.18), 0 0 28px rgba(140,200,255,0.05)';
   document.body.appendChild(star);
 
-  // create trail flakes
   const trailCount = 7;
   const trails = [];
   const trailColors = ['#ffb2ee','#c9a1ff','#9fe8ff'];
@@ -534,7 +538,6 @@ function animateAddToCartAndAdd(product, imgEl){
     trails.push(f);
   }
 
-  // animate star + trails
   requestAnimationFrame(()=>{
     const dx = endX - startX;
     const dy = endY - startY;
@@ -551,9 +554,7 @@ function animateAddToCartAndAdd(product, imgEl){
     });
   });
 
-  // cleanup + add to cart
   setTimeout(()=>{
-    // fade out quickly
     star.style.opacity = '0';
     trails.forEach(f=>f.style.opacity = '0');
     setTimeout(()=>{
@@ -561,11 +562,8 @@ function animateAddToCartAndAdd(product, imgEl){
       trails.forEach(f=>{ if(f && f.parentNode) f.parentNode.removeChild(f); });
     }, 380);
 
-    // push item to cart after animation
     cart.push(product);
     updateCartCount();
-
-    // bounce cart visually
     cartBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}],{duration:360,easing:'cubic-bezier(.2,.9,.3,1)'});
   }, 920);
 }
@@ -574,9 +572,8 @@ function animateAddToCartAndAdd(product, imgEl){
    Initialization
    ============================= */
 function init(){
-  // fill 'all' arrays automatically if empty (if user didn't fill)
+  // auto-fill 'all' if empty
   if(Array.isArray(window.productsGarden?.all) && window.productsGarden.all.length === 0){
-    // merge other categories into all if it's empty
     for(const k of Object.keys(window.productsGarden)){
       if(k === 'all') continue;
       window.productsGarden.all = window.productsGarden.all.concat(window.productsGarden[k] || []);
@@ -592,10 +589,10 @@ function init(){
   // set discord link
   const dl = document.getElementById('discord-link'); if(dl){ dl.href = DISCORD_INVITE; dl.target = '_blank'; }
 
-  // initial category rendering (empty until mode selected)
+  // initial categories (empty)
   renderCategories();
 
-  // keyboard: Escape returns to intro
+  // Esc to intro
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') resetIntro(); });
 }
 init();
