@@ -3,175 +3,245 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Onyx — Store</title>
+<title>Onyx — Store (Placeholders)</title>
 <style>
-  /* reset */
+  /* ===== Reset & base ===== */
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     color:#fff;
-    background:#030012;
-    overflow:hidden;
+    background:#02000a;
+    overflow:auto; /* allow scrolling */
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
   }
 
-  /* ===== Nebula + Canvas ===== */
-  #star-canvas{position:fixed;inset:0;z-index:0}
+  /* ===== Nebula + canvas ===== */
+  #star-canvas{position:fixed;inset:0;z-index:0;display:block}
   .nebula{
     position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(800px 500px at 10% 20%, rgba(120,0,255,0.14), transparent 10%),
-      radial-gradient(900px 500px at 80% 70%, rgba(0,120,255,0.08), transparent 8%),
-      radial-gradient(600px 350px at 50% 40%, rgba(255,0,160,0.06), transparent 6%);
-    filter: blur(40px) saturate(1.05);
-    opacity:0.95; mix-blend-mode: screen;
-    animation: nebMove 26s linear infinite, nebRotate 60s linear infinite;
+      radial-gradient(700px 450px at 12% 18%, rgba(220,80,255,0.14), transparent 12%),
+      radial-gradient(900px 550px at 80% 78%, rgba(60,190,255,0.10), transparent 12%),
+      radial-gradient(500px 350px at 50% 45%, rgba(255,40,160,0.08), transparent 9%);
+    filter: blur(36px) saturate(1.08);
+    mix-blend-mode: screen;
+    opacity:1;
+    animation: nebTranslate 28s linear infinite, nebSlowPulse 8s ease-in-out infinite;
   }
-  @keyframes nebMove { 0%{transform:translateY(0)}50%{transform:translateY(-40px)}100%{transform:translateY(0)} }
-  @keyframes nebRotate { 0%{transform:rotate(0deg)}100%{transform:rotate(360deg)} }
+  @keyframes nebTranslate{0%{transform:translateY(0)}50%{transform:translateY(-36px)}100%{transform:translateY(0)}}
+  @keyframes nebSlowPulse{0%{opacity:0.98}50%{opacity:1}100%{opacity:0.98}}
 
-  /* subtle animated overlay */
-  .gloss { position:fixed;inset:0;z-index:0;pointer-events:none; background:
-    linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0));
-    mix-blend-mode: overlay; opacity:0.6;
+  .glossOverlay{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0));
+    mix-blend-mode: overlay; opacity:0.45;
   }
 
-  /* ===== Layout ===== */
-  header{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:24px 36px;
-    background:linear-gradient(90deg, rgba(120,0,255,0.08), rgba(255,16,150,0.04));backdrop-filter: blur(6px);
+  /* ===== Layout & header ===== */
+  header{
+    position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:22px 36px;
+    background:linear-gradient(90deg, rgba(120,0,255,0.06), rgba(255,16,150,0.03));
     border-bottom:1px solid rgba(255,255,255,0.02);
+    backdrop-filter: blur(6px);
   }
-  header h1{font-size:36px;letter-spacing:1px;color:#ffdfff;text-shadow:0 0 18px rgba(200,100,255,0.06)}
+  header h1{font-size:34px;letter-spacing:1px;color:#ffdffb;text-shadow:0 0 14px rgba(200,100,255,0.06)}
   .cart-button{
-    background:linear-gradient(90deg,#fff,#fafafa); color:#5c0088; border:none; padding:12px 20px; border-radius:14px;
-    font-weight:900; cursor:pointer; font-size:18px; box-shadow:0 12px 36px rgba(150,0,200,0.08);
-    transition: transform .18s ease, box-shadow .18s ease;
+    display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(90deg,#fff,#fafafa); color:#4a0066; border:none;
+    padding:12px 18px; border-radius:14px; font-weight:900; font-size:18px; cursor:pointer;
+    box-shadow:0 12px 36px rgba(160,0,220,0.08); transition: transform .18s ease, box-shadow .18s;
   }
-  .cart-button:hover{ transform:translateY(-4px); box-shadow:0 22px 48px rgba(150,0,200,0.12) }
+  .cart-button:hover{ transform:translateY(-4px); box-shadow:0 22px 48px rgba(170,0,220,0.12) }
+  #cart-count{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,#ffd6ff,#ffc0ea);color:#140018;font-weight:900;transition:transform .25s ease}
 
-  .claim-banner{position:relative;z-index:3;margin:18px auto;max-width:1280px;padding:18px 22px;border-radius:14px;
-    border:1px solid rgba(255,0,120,0.14); background:linear-gradient(90deg, rgba(255,10,120,0.06), rgba(255,120,180,0.02));
-    text-align:center;font-weight:900;color:#ffd7ea; box-shadow:0 14px 40px rgba(255,0,140,0.03);
-    animation: bannerFloat 6s ease-in-out infinite;
+  /* claim banner */
+  .claim-banner{position:relative;z-index:5;margin:18px auto;max-width:1280px;padding:16px 20px;border-radius:14px;
+    border:1px solid rgba(255,0,120,0.12); background:linear-gradient(90deg, rgba(255,10,120,0.06), rgba(255,120,180,0.02));
+    text-align:center;font-weight:900;color:#ffd7ea; box-shadow:0 12px 40px rgba(255,0,140,0.03); animation: floatY 6s ease-in-out infinite;}
+  @keyframes floatY{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+  .claim-banner a{color:#ffd0ff;text-decoration:underline}
+
+  /* main layout */
+  .container{position:relative;z-index:4;max-width:1400px;margin:18px auto;padding:0 24px 80px;display:flex;gap:28px;align-items:start}
+  .sidebar{
+    width:320px;background:linear-gradient(180deg, rgba(12,4,30,0.75), rgba(6,2,20,0.7));
+    padding:22px;border-radius:16px;border:1px solid rgba(160,0,255,0.08);box-shadow:0 28px 90px rgba(10,0,40,0.7);
+    transform-origin:left center; animation: sidebarIn .6s both;
   }
-  @keyframes bannerFloat{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
-
-  .main{position:relative;z-index:2;display:flex;gap:28px;max-width:1400px;margin:18px auto;padding:0 28px 100px}
-  .sidebar{width:320px;background:linear-gradient(180deg, rgba(12,4,30,0.7), rgba(6,2,20,0.65));padding:22px;border-radius:16px;border:1px solid rgba(120,0,255,0.12);
-    box-shadow:0 28px 80px rgba(10,0,40,0.6);backdrop-filter: blur(6px); transform-origin:left center; animation: sidebarIn .6s ease both;
+  @keyframes sidebarIn{from{transform:translateX(-10px) scale(.995);opacity:0}to{transform:none;opacity:1}}
+  .sidebar .cat-btn{
+    display:block;width:100%;margin-bottom:12px;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#7e00ff,#ff1599);
+    color:white;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 12px 36px rgba(140,0,255,0.12);transition:transform .14s, box-shadow .14s;
   }
-  @keyframes sidebarIn{from{transform:translateX(-12px) scale(.995);opacity:0}to{transform:none;opacity:1}}
-  .sidebar button{display:block;width:100%;margin-bottom:14px;padding:14px;border-radius:14px;border:none;
-    background:linear-gradient(90deg,#7e00ff,#ff1599);color:white;font-weight:900;font-size:18px;cursor:pointer;
-    box-shadow:0 12px 36px rgba(140,0,255,0.12); transition: transform .14s, box-shadow .14s; }
-  .sidebar button:hover{ transform:translateY(-6px); box-shadow:0 18px 46px rgba(140,0,255,0.16) }
+  .sidebar .cat-btn:hover{transform:translateY(-6px);box-shadow:0 18px 46px rgba(140,0,255,0.16)}
 
-  .products{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:28px; align-content:start}
+  .products{
+    flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:28px;
+    align-content:start;
+  }
 
+  /* product card */
   .product{
-    background:linear-gradient(180deg, rgba(40,8,80,0.9), rgba(6,2,20,0.88));
-    border-radius:18px;padding:22px;border:1px solid rgba(180,0,255,0.10);
-    box-shadow:0 28px 90px rgba(0,0,0,0.75);transform-origin:center;animation:cardIn .5s cubic-bezier(.2,.9,.3,1) both;
-    transition: transform .18s ease, box-shadow .18s ease, filter .18s;
+    background:linear-gradient(180deg, rgba(40,8,80,0.92), rgba(6,2,20,0.9));
+    border-radius:16px;padding:20px;border:1px solid rgba(200,0,255,0.08);
+    box-shadow:0 28px 90px rgba(0,0,0,0.8);transition:transform .18s ease, box-shadow .18s ease, filter .18s;
+    transform-origin:center; animation: cardIn .55s cubic-bezier(.2,.9,.3,1) both;
   }
   @keyframes cardIn{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
-  .product:hover{ transform:translateY(-10px) scale(1.02); box-shadow:0 40px 120px rgba(170,0,255,0.18); filter:brightness(1.02) }
+  .product:hover{transform:translateY(-10px) scale(1.02); box-shadow:0 44px 130px rgba(180,0,255,0.18); filter:brightness(1.03)}
 
-  .product img{width:100%;height:260px;object-fit:cover;border-radius:14px;margin-bottom:14px;background:linear-gradient(180deg,#222,#111)}
-  .product h3{font-size:22px;margin-bottom:8px}
-  .product p{font-size:18px;color:#e9e0ff;margin-bottom:12px;font-weight:800}
-  .product .actions{display:flex;gap:14px;align-items:center}
-  .add-btn{flex:1;padding:14px;border-radius:14px;border:none;background:linear-gradient(90deg,#ff66ff,#9c00ff);
-    color:#120017;font-weight:900;font-size:18px;cursor:pointer;transition:transform .12s}
-  .add-btn:hover{transform:translateY(-5px)}
-  .price-tag{font-weight:900;color:#ffd7ff;font-size:18px}
+  .product img{width:100%;height:260px;object-fit:cover;border-radius:12px;margin-bottom:14px;background:linear-gradient(180deg,#1a0b26,#0b0712)}
+  .product h3{font-size:20px;margin-bottom:6px}
+  .product .price{font-size:18px;color:#ffdff4;font-weight:900;margin-bottom:12px}
+  .product .actions{display:flex;gap:12px;align-items:center}
+  .add-btn{
+    flex:1;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#ff66ff,#9c00ff);
+    color:#110018;font-weight:900;font-size:17px;cursor:pointer;transition:transform .12s;
+  }
+  .add-btn:hover{transform:translateY(-6px)}
+  /* entrance for buttons */
+  .big-btn { padding:14px 18px; border-radius:12px; font-weight:900; }
 
   /* intro overlay */
-  .intro{position:fixed;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;
-    background:radial-gradient(circle at center, rgba(0,0,0,0.55), rgba(0,0,0,0.86));backdrop-filter: blur(8px)}
-  .intro-card{width:min(880px,96%);background:linear-gradient(180deg, rgba(16,6,45,0.96), rgba(10,3,32,0.98));
-    border-radius:18px;padding:36px;text-align:center;border:1px solid rgba(200,160,255,0.06);box-shadow:0 36px 120px rgba(10,0,40,0.9)}
-  .intro h2{font-size:38px;margin-bottom:10px;color:#ffd8ff}
+  .intro{
+    position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at center, rgba(0,0,0,0.6), rgba(0,0,0,0.88));backdrop-filter:blur(8px);
+  }
+  .intro-card{
+    width:min(920px,96%);padding:40px;border-radius:18px;background:linear-gradient(180deg,rgba(16,6,38,0.98),rgba(8,3,30,0.99));
+    border:1px solid rgba(220,150,255,0.04);box-shadow:0 40px 140px rgba(4,0,20,0.9);
+  }
+  .intro h2{font-size:40px;margin-bottom:10px;color:#ffdffb}
   .choices{display:flex;gap:26px;justify-content:center;margin-top:22px;flex-wrap:wrap}
-  .choice{padding:18px 28px;border-radius:16px;border:2px solid rgba(255,255,255,0.04);
-    background:linear-gradient(90deg,#6b00ff,#ff2288);font-weight:900;font-size:20px;color:white;cursor:pointer;transition:transform .14s}
+  .choice{
+    background:linear-gradient(90deg,#6b00ff,#ff2288); padding:18px 26px;border-radius:16px;color:white;font-weight:900;font-size:20px;cursor:pointer;
+    border:2px solid rgba(255,255,255,0.03);transition:transform .14s;
+  }
   .choice:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 20px 60px rgba(150,0,255,0.12)}
 
-  /* modal */
-  .modal{position:fixed;inset:0;z-index:12;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.9));padding:26px}
-  .modal-card{width:600px;background:linear-gradient(180deg, rgba(20,6,70,0.96), rgba(8,3,40,0.98));border-radius:16px;padding:20px;border:1px solid rgba(200,0,255,0.12);box-shadow:0 36px 120px rgba(0,0,0,0.9);animation:modalIn .28s ease both}
-  @keyframes modalIn{from{transform:translateY(14px) scale(.99);opacity:0}to{transform:none;opacity:1}}
+  /* modal / checkout */
+  .modal{position:fixed;inset:0;z-index:12;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.92));padding:26px}
+  .modal-card{width:680px;background:linear-gradient(180deg, rgba(18,6,60,0.97), rgba(10,3,40,0.98));border-radius:16px;padding:20px;border:1px solid rgba(200,0,255,0.12);box-shadow:0 44px 140px rgba(0,0,0,0.95)}
   .checkout-item{display:flex;justify-content:space-between;padding:12px;border-radius:12px;background:rgba(255,255,255,0.02);margin-bottom:10px}
-  .checkout-footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+  .checkout-footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+
+  /* unified nice buttons */
+  .btn-primary{
+    background:linear-gradient(90deg,#ff66ff,#9c00ff);
+    color:#120018;border:none;padding:14px 20px;border-radius:12px;font-weight:900;font-size:18px;cursor:pointer;
+    box-shadow:0 18px 50px rgba(200,0,255,0.12);transition:transform .14s,box-shadow .14s;
+  }
+  .btn-primary:hover{transform:translateY(-6px);box-shadow:0 28px 80px rgba(200,0,255,0.16)}
+  .btn-secondary{
+    background:linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    color:#fff;border:none;padding:12px 16px;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:transform .12s;
+  }
+  .btn-secondary:hover{transform:translateY(-5px)}
 
   /* payment pills */
   .payment-pills{display:flex;gap:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:6px;border-radius:999px;align-items:center}
-  .pill{padding:8px 14px;border-radius:999px;border:none;background:transparent;color:#ddd;font-weight:800;cursor:pointer;transition:all .15s}
-  .pill.active{background:linear-gradient(90deg,#ff66ff,#9c00ff);color:#150018;box-shadow:0 8px 22px rgba(200,0,255,0.12);transform:translateY(-4px)}
+  .pill{padding:10px 16px;border-radius:999px;border:none;background:transparent;color:#ddd;font-weight:800;cursor:pointer;transition:all .15s}
+  .pill.active{background:linear-gradient(90deg,#ffd1ff,#ff9bdc);color:#140018;box-shadow:0 10px 28px rgba(200,0,255,0.12);transform:translateY(-4px)}
 
-  /* cart badge animation */
-  #cart-count{display:inline-block;padding:2px 8px;border-radius:999px;background:linear-gradient(90deg,#ffd6ff,#ff9ee8);color:#150018;font-weight:900; margin-left:6px; transition:transform .2s ease}
-
-  /* flying star + trail classes */
-  .fly-star{position:fixed;z-index:20;font-size:28px;pointer-events:none;text-shadow:0 6px 16px rgba(255,100,200,0.3),0 0 28px rgba(180,0,255,0.12)}
-  .trail-flake{position:fixed;z-index:19;font-size:14px;pointer-events:none;opacity:0.9;filter:blur(0.6px)}
+  /* flying star and trail */
+  .fly-star{position:fixed;z-index:50;font-size:30px;pointer-events:none;text-shadow:0 6px 18px rgba(200,80,255,0.18),0 0 36px rgba(120,240,255,0.06)}
+  .trail{position:fixed;z-index:49;font-size:14px;pointer-events:none;opacity:0.95;filter:blur(.6px);}
 
   /* micro animations */
-  .glowPulse{animation:glowPulse 2.6s ease-in-out infinite}
-  @keyframes glowPulse{0%{box-shadow:0 12px 36px rgba(150,0,200,0.06)}50%{box-shadow:0 18px 56px rgba(200,0,255,0.10)}100%{box-shadow:0 12px 36px rgba(150,0,200,0.06)}}
+  .pulse{animation:pulseScale 1.2s infinite}
+  @keyframes pulseScale{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 
   /* responsive */
   @media (max-width:1100px){
+    .container{flex-direction:column;padding-bottom:120px}
     .sidebar{width:100%;display:flex;gap:10px;overflow-x:auto}
-    .main{flex-direction:column}
     .products{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
     .product img{height:180px}
-    .modal-card{width:92%}
+    .modal-card{width:94%}
+    header h1{font-size:28px}
   }
 </style>
 </head>
 <body>
 
-<!-- ===== CONFIG ===== -->
+<!-- ========== CONFIG: Edit only the arrays below to change products ========== -->
 <script>
-  // replace with your real discord invite (KEEP protocol, i.e. https://...)
-  const DISCORD_INVITE = "https://discord.gg/your-invite-here";
+  // Discord invite to redirect to when Buy is clicked
+  const DISCORD_INVITE = "https://discord.gg/qZvny4sWZs";
+
+  // Products for "Grow a garden stuff" mode
+  // Structure: keys = categories; key 'all' = all products (fill manually or auto-fill)
+  const productsGarden = {
+    all: [
+      { id: "g1", name: "Placeholder Product 1", price: "2.50", img: null },
+      { id: "g2", name: "Placeholder Product 2", price: "3.00", img: null }
+    ],
+    "Placeholder 1": [
+      { id: "g3", name: "Placeholder Product 3", price: "6.00", img: null },
+      { id: "g4", name: "Placeholder Product 4", price: "4.50", img: null }
+    ],
+    "Placeholder 2": [
+      { id: "g5", name: "Placeholder Product 5", price: "8.00", img: null },
+      { id: "g6", name: "Placeholder Product 6", price: "5.50", img: null }
+    ]
+  };
+
+  // Products for "Server designing" mode
+  const productsServer = {
+    all: [
+      { id: "s1", name: "Placeholder Product 7", price: "6.00", img: null },
+      { id: "s2", name: "Placeholder Product 8", price: "7.50", img: null }
+    ],
+    "Placeholder 1": [
+      { id: "s3", name: "Placeholder Product 9", price: "3.50", img: null },
+      { id: "s4", name: "Placeholder Product 10", price: "4.00", img: null }
+    ],
+    "Placeholder 2": [
+      { id: "s5", name: "Placeholder Product 11", price: "12.00", img: null },
+      { id: "s6", name: "Placeholder Product 12", price: "25.00", img: null }
+    ]
+  };
 </script>
 
-<!-- Canvas + nebula -->
+<!-- Canvas + nebula overlays -->
 <canvas id="star-canvas"></canvas>
 <div class="nebula" aria-hidden="true"></div>
-<div class="gloss" aria-hidden="true"></div>
+<div class="glossOverlay" aria-hidden="true"></div>
 
+<!-- Header -->
 <header>
   <h1>Onyx</h1>
   <button class="cart-button" onclick="openCart()">🛒 Cart <span id="cart-count">0</span></button>
 </header>
 
+<!-- Claim banner (join Discord) -->
 <div class="claim-banner">
   ⚠️ To claim purchased items, please join our <a id="discord-link" href="#" target="_blank" rel="noopener">Discord server</a>.
 </div>
 
-<!-- Intro -->
+<!-- Intro overlay -->
 <div id="intro" class="intro" role="dialog" aria-modal="true">
   <div class="intro-card">
     <h2>What are you looking for?</h2>
-    <p style="color:#e8d6ff;font-weight:800;margin-top:8px;font-size:15px">Choose one to view matching items.</p>
+    <p style="color:#e8d6ff;font-weight:800;margin-top:8px;font-size:15px">Choose an option to view matching placeholder items.</p>
     <div class="choices" style="margin-top:22px">
-      <button class="choice" onclick="selectMode('grow')">Grow a garden stuff</button>
-      <button class="choice" onclick="selectMode('design')">Server designing</button>
+      <button class="choice" onclick="selectMode('garden')">Grow a garden stuff</button>
+      <button class="choice" onclick="selectMode('server')">Server designing</button>
     </div>
   </div>
 </div>
 
-<!-- Main -->
-<div class="main" id="main-content" aria-hidden="true">
+<!-- Main content -->
+<div class="container" id="main-content" aria-hidden="true">
   <aside class="sidebar" id="category-list" aria-label="Categories">
-    <!-- categories are injected dynamically -->
+    <!-- categories injected via JS -->
   </aside>
 
   <section class="products" id="products" aria-live="polite">
-    <!-- products injected here -->
+    <!-- products injected via JS -->
   </section>
 </div>
 
@@ -180,12 +250,12 @@
   <div class="modal-card">
     <h2 style="color:#ffd7ff;margin-bottom:10px">Checkout</h2>
 
-    <div id="cart-items" style="max-height:360px;overflow:auto;margin-bottom:14px"></div>
+    <div id="cart-items" style="max-height:420px;overflow:auto;margin-bottom:14px"></div>
 
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px">
       <div style="display:flex;gap:12px;align-items:center">
         <div style="font-weight:900;color:#e6d6ff">Payment:</div>
-        <div class="payment-pills" role="tablist" aria-label="Select payment method" id="payment-pills">
+        <div class="payment-pills" role="tablist" id="payment-pills">
           <button class="pill active" data-val="paypal" onclick="selectPayment(this)">PayPal</button>
           <button class="pill" data-val="roblox" onclick="selectPayment(this)">Roblox</button>
         </div>
@@ -194,36 +264,38 @@
     </div>
 
     <div class="checkout-footer">
-      <button class="buy-btn glowPulse" onclick="buyItems()">Buy</button>
-      <button class="cancel-btn" onclick="closeCart()">Close</button>
+      <button class="btn-primary" onclick="buyItems()">Buy</button>
+      <button class="btn-secondary" onclick="closeCart()">Close</button>
     </div>
   </div>
 </div>
 
-<!-- audio (optional) -->
+<!-- sound -->
 <audio id="click-sound" src="click.mp3" preload="auto"></audio>
 
 <script>
-/* ------------------------------
-   STAR CANVAS (twinkling) 
-   ------------------------------ */
+/* ===========================
+   STAR CANVAS + Nebula stars
+   =========================== */
 const canvas = document.getElementById('star-canvas');
 const ctx = canvas.getContext('2d');
-let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
+let W = canvas.width = innerWidth;
+let H = canvas.height = innerHeight;
 window.addEventListener('resize', ()=>{ W = canvas.width = innerWidth; H = canvas.height = innerHeight; initStars(); });
 
 function rand(a,b){ return Math.random()*(b-a)+a; }
 
+/* stars */
 let stars = [];
-const STAR_COUNT = Math.floor((window.innerWidth*window.innerHeight)/28000) + 90;
+const STAR_COUNT = Math.floor((innerWidth*innerHeight)/26000) + 120;
 function initStars(){
   stars = [];
   for(let i=0;i<STAR_COUNT;i++){
     stars.push({
       x: Math.random()*W,
       y: Math.random()*H,
-      z: rand(0.2,1.2),
-      r: rand(0.3,1.9),
+      z: rand(0.2,1.25),
+      r: rand(0.3,2.2),
       dx: rand(-0.04,0.04),
       dy: rand(-0.03,0.03),
       tw: Math.random()*1.8
@@ -231,95 +303,51 @@ function initStars(){
   }
 }
 initStars();
-let t=0;
-function drawStars(){
+
+let t = 0;
+function draw(){
   ctx.clearRect(0,0,W,H);
-  // soft overlay
+  // subtle color overlay
   const g = ctx.createLinearGradient(0,0,W,H);
-  g.addColorStop(0,'rgba(255,120,200,0.01)');
-  g.addColorStop(1,'rgba(0,120,255,0.01)');
+  g.addColorStop(0, 'rgba(255,120,200,0.01)');
+  g.addColorStop(1, 'rgba(0,120,255,0.01)');
   ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
 
   for(const s of stars){
-    const tw = Math.sin(t*0.02*s.tw)*0.7 + 0.8;
-    const size = s.r * tw * s.z;
+    const tw = Math.sin(t*0.02*s.tw)*0.7 + 0.85;
+    const size = s.r * s.z * tw;
     ctx.beginPath();
-    ctx.fillStyle = `rgba(255,255,255,${0.55 * s.z * tw})`;
-    ctx.arc(s.x,s.y,Math.max(0.2,size),0,Math.PI*2); ctx.fill();
-    s.x += s.dx*(1+0.6*s.z);
-    s.y += s.dy*(1+0.6*s.z);
-    if(s.x < -10) s.x = W+10; if(s.x > W+10) s.x = -10;
-    if(s.y < -10) s.y = H+10; if(s.y > H+10) s.y = -10;
+    ctx.fillStyle = `rgba(255,255,255,${0.5 * s.z * tw})`;
+    ctx.arc(s.x, s.y, Math.max(0.2, size), 0, Math.PI*2);
+    ctx.fill();
+    s.x += s.dx*(1 + 0.6*s.z);
+    s.y += s.dy*(1 + 0.6*s.z);
+    if(s.x < -10) s.x = W + 10;
+    if(s.x > W+10) s.x = -10;
+    if(s.y < -10) s.y = H + 10;
+    if(s.y > H+10) s.y = -10;
   }
-  t++; requestAnimationFrame(drawStars);
+
+  t++;
+  requestAnimationFrame(draw);
 }
-drawStars();
+requestAnimationFrame(draw);
 
-/* ------------------------------
-   PRODUCTS (PLACEHOLDERS)
-   - every product name is "Placeholder Product X"
-   - "All Products" category added automatically
-   ------------------------------ */
-const PRODUCTS = {
-  grow: {
-    "All Products": [], // will be auto-filled at init
-    "Seeds": [
-      { id: "g-s-1", name: "Placeholder Product 1", price: "2.50", img: null },
-      { id: "g-s-2", name: "Placeholder Product 2", price: "3.00", img: null }
-    ],
-    "Tools": [
-      { id: "g-t-1", name: "Placeholder Product 3", price: "6.00", img: null },
-      { id: "g-t-2", name: "Placeholder Product 4", price: "4.50", img: null }
-    ],
-    "Decor": [
-      { id: "g-d-1", name: "Placeholder Product 5", price: "8.00", img: null },
-      { id: "g-d-2", name: "Placeholder Product 6", price: "5.50", img: null }
-    ]
-  },
-  design: {
-    "All Products": [], // auto-filled
-    "Themes": [
-      { id: "d-th-1", name: "Placeholder Product 7", price: "6.00", img: null },
-      { id: "d-th-2", name: "Placeholder Product 8", price: "7.50", img: null }
-    ],
-    "Icons": [
-      { id: "d-i-1", name: "Placeholder Product 9", price: "3.50", img: null },
-      { id: "d-i-2", name: "Placeholder Product 10", price: "4.00", img: null }
-    ],
-    "Kits": [
-      { id: "d-k-1", name: "Placeholder Product 11", price: "12.00", img: null },
-      { id: "d-k-2", name: "Placeholder Product 12", price: "25.00", img: null }
-    ]
-  }
-};
+/* ===========================
+   Application state & helpers
+   =========================== */
 
-/* auto-fill All Products from others */
-function fillAllProducts(){
-  for(const mode of Object.keys(PRODUCTS)){
-    const all = [];
-    Object.entries(PRODUCTS[mode]).forEach(([cat,items])=>{
-      if(cat === "All Products") return;
-      items.forEach(it => all.push(it));
-    });
-    PRODUCTS[mode]["All Products"] = all;
-  }
-}
-fillAllProducts();
-
-/* ------------------------------
-   STATE
-   ------------------------------ */
-let currentMode = null; // 'grow'|'design'
+/* Mode data references to arrays defined earlier in <script> scope */
+let mode = null; // 'garden' or 'server'
 let cart = [];
 let selectedPayment = 'paypal';
 
-/* small utilities */
+/* Utilities */
 function playClick(){
-  const a = document.getElementById('click-sound');
-  if(a && a.play){ try { a.play(); } catch(e) {} }
+  const a = document.getElementById('click-sound'); if(a && a.play){ try{ a.play(); }catch(e){} }
 }
-function placeholderDataURL(text,w=900,h=600,bg='#241233',fg='#ffd6ff'){
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>
+function dataURLPlaceholder(text,width=900,height=600,bg='#1e0b2a',fg='#ffdff8'){
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}'>
     <rect width='100%' height='100%' fill='${bg}' rx='12'/>
     <g font-family='Segoe UI, Tahoma, Verdana' font-weight='800' fill='${fg}' font-size='36' text-anchor='middle'>
       <text x='50%' y='50%'>${text}</text>
@@ -328,69 +356,79 @@ function placeholderDataURL(text,w=900,h=600,bg='#241233',fg='#ffd6ff'){
   return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
 }
 
-/* render categories in sidebar */
+/* Grab reference to the product data arrays (global scope) */
+function getProductsForMode(currentMode){
+  if(currentMode === 'garden') return window.productsGarden || { all: [] };
+  if(currentMode === 'server') return window.productsServer || { all: [] };
+  return { all: [] };
+}
+
+/* Render categories into sidebar (category labels are placeholders as requested) */
 function renderCategories(){
-  const list = document.getElementById('category-list');
-  list.innerHTML = '';
-  const back = document.createElement('button'); back.textContent = 'Back to choices'; back.onclick = resetIntro; list.appendChild(back);
-  if(!currentMode) return;
-  const cats = Object.keys(PRODUCTS[currentMode]);
-  cats.forEach(cat=>{
-    const btn = document.createElement('button');
-    btn.textContent = cat;
-    btn.onclick = ()=>{ playClick(); showProducts(cat); };
-    list.appendChild(btn);
+  const catList = document.getElementById('category-list');
+  catList.innerHTML = '';
+  // back button
+  const back = document.createElement('button'); back.className='cat-btn'; back.textContent='Back to choices';
+  back.onclick = resetIntro; catList.appendChild(back);
+
+  if(!mode) return;
+  const data = getProductsForMode(mode);
+  const cats = Object.keys(data || {});
+  cats.forEach(cat => {
+    const b = document.createElement('button');
+    b.className = 'cat-btn';
+    b.textContent = cat;
+    b.onclick = ()=>{ playClick(); showProducts(cat); };
+    catList.appendChild(b);
   });
 }
 
-/* show products */
-function showProducts(category){
+/* Show products for a category (or All) */
+function showProducts(categoryKey){
   const container = document.getElementById('products');
   container.innerHTML = '';
-  if(!currentMode) return;
+  const data = getProductsForMode(mode);
+  if(!data) return;
   let items = [];
-  if(!category || category === 'All Products') {
-    items = PRODUCTS[currentMode]["All Products"];
-  } else {
-    items = PRODUCTS[currentMode][category] || [];
-  }
-  if(items.length === 0){
-    container.innerHTML = `<div style="padding:20px;border-radius:12px;background:rgba(255,255,255,0.02)">No items</div>`;
+  if(!categoryKey || categoryKey === 'all' || categoryKey === 'All Products') items = data['all'] || [];
+  else items = data[categoryKey] || [];
+
+  if(!items || items.length === 0){
+    container.innerHTML = `<div style="padding:20px;border-radius:12px;background:rgba(255,255,255,0.02);color:#ddd">No items</div>`;
     return;
   }
-  items.forEach((p,i)=>{
+  items.forEach((p, idx) => {
     const card = document.createElement('div'); card.className='product';
-    const imgSrc = p.img || placeholderDataURL('Image',900,600);
+    const imgSrc = p.img || dataURLPlaceholder('Image');
     card.innerHTML = `
       <img src="${imgSrc}" alt="${p.name}">
       <h3>${p.name}</h3>
-      <p class="price-tag">$${parseFloat(p.price).toFixed(2)}</p>
+      <div class="price">$${parseFloat(p.price).toFixed(2)}</div>
       <div class="actions">
-        <button class="add-btn" data-id="${p.id}">Add to Cart</button>
+        <button class="add-btn big-btn" data-id="${p.id}">Add to Cart</button>
       </div>
     `;
     container.appendChild(card);
-    // bind animation
     const btn = card.querySelector('.add-btn');
-    const img = card.querySelector('img');
-    btn.addEventListener('click', ()=> animateAddToCart(p, img));
+    const imgEl = card.querySelector('img');
+    btn.addEventListener('click', ()=> animateAddToCartAndAdd(p, imgEl));
   });
 }
 
-/* selection from intro */
-function selectMode(mode){
+/* Intro selection */
+function selectMode(selected){
   playClick();
-  currentMode = mode;
+  mode = selected; // 'garden' or 'server'
   document.getElementById('intro').style.display = 'none';
   document.getElementById('main-content').setAttribute('aria-hidden','false');
   renderCategories();
-  showProducts('All Products');
+  showProducts('All Products'); // show All products by default
 }
 
-/* back to intro */
+/* reset intro */
 function resetIntro(){
   playClick();
-  currentMode = null;
+  mode = null;
   cart = [];
   updateCartCount();
   document.getElementById('intro').style.display = 'flex';
@@ -399,27 +437,15 @@ function resetIntro(){
   renderCategories();
 }
 
-/* cart functions */
+/* cart UI */
 function updateCartCount(){
-  const el = document.getElementById('cart-count');
-  el.textContent = cart.length;
-  // pulse animation
-  el.animate([{transform:'scale(1)'},{transform:'scale(1.25)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.2,.9,.3,1)'});
+  const el = document.getElementById('cart-count'); el.textContent = cart.length;
+  el.animate([{transform:'scale(1)'},{transform:'scale(1.25)'},{transform:'scale(1)'}],{duration:360,easing:'cubic-bezier(.2,.9,.3,1)'});
 }
-
-/* remove item */
-function removeItem(i){
-  playClick();
-  if(i>=0 && i<cart.length) cart.splice(i,1);
-  updateCartCount();
-  openCart();
-}
-
-/* open modal */
 function openCart(){
   playClick();
   const modal = document.getElementById('cart-modal');
-  const items = document.getElementById('cart-items'); items.innerHTML='';
+  const items = document.getElementById('cart-items'); items.innerHTML = '';
   if(cart.length === 0){
     items.innerHTML = `<div style="padding:18px;color:#ddd">Your cart is empty.</div>`;
     document.getElementById('cart-total').textContent = 'Total: $0.00';
@@ -438,43 +464,37 @@ function openCart(){
   }
   modal.style.display = 'flex';
 }
-
-/* close modal */
 function closeCart(){ playClick(); document.getElementById('cart-modal').style.display = 'none'; }
+function removeItem(i){ playClick(); if(i>=0 && i<cart.length) cart.splice(i,1); updateCartCount(); openCart(); }
 
-/* select payment pill */
+/* payment selection (pills) */
 function selectPayment(btn){
   playClick();
-  const pills = document.querySelectorAll('.pill');
-  pills.forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   selectedPayment = btn.getAttribute('data-val');
 }
 
-/* BUY: redirect immediately to discord invite (no alerts) */
+/* BUY — direct redirect to DISCORD_INVITE (no alert) */
 function buyItems(){
   playClick();
-  if(cart.length === 0) return closeCart();
-  // calculate total safely
+  if(cart.length === 0){ closeCart(); return; }
+  // compute total safely
   let total = 0;
-  for(let i=0;i<cart.length;i++){
-    const p = parseFloat(cart[i].price);
-    if(!isNaN(p)) total += p;
-  }
-  // optionally you can send payment method to server - here we just redirect to discord invite
-  const invite = typeof DISCORD_INVITE === 'string' ? DISCORD_INVITE : 'https://discord.gg/your-invite-here';
-  // direct redirect (no alert)
-  window.location.href = invite;
+  for(let i=0;i<cart.length;i++){ const p=parseFloat(cart[i].price); if(!isNaN(p)) total += p; }
+  // redirect to invite
+  window.location.href = (typeof DISCORD_INVITE === 'string') ? DISCORD_INVITE : 'https://discord.gg/qZvny4sWZs';
 }
 
-/* ------------------------------
-   Add-to-cart star + trail animation
-   - star color matches nebula (pink -> purple -> blue)
-   - trail consists of several small flakes
-   ------------------------------ */
-function animateAddToCart(product, imgEl){
+/* =============================
+   Add-to-cart animation with star + trail
+   - star tinted to nebula colors
+   - multiple small flake trail elements
+   - after animation, add item to cart & update badge
+   ============================= */
+function animateAddToCartAndAdd(product, imgEl){
   playClick();
-  // positions
+  // get start & end positions
   const imgRect = imgEl.getBoundingClientRect();
   const startX = imgRect.left + imgRect.width/2;
   const startY = imgRect.top + imgRect.height/2;
@@ -490,84 +510,95 @@ function animateAddToCart(product, imgEl){
   star.style.top = startY + 'px';
   star.style.transform = 'translate(-50%,-50%) scale(1)';
   star.style.opacity = '1';
-  // gradient color via emoji + shadow
+  // color to match nebula (pink -> purple -> cyan)
   star.innerHTML = '⭐';
-  star.style.color = '#ff9ef3';
-  star.style.transition = 'transform 850ms cubic-bezier(.2,.9,.3,1), opacity 300ms';
-
+  star.style.color = '#ffa3e9';
+  star.style.textShadow = '0 6px 18px rgba(255,140,220,0.18), 0 0 28px rgba(140,200,255,0.05)';
   document.body.appendChild(star);
 
   // create trail flakes
-  const trailCount = 6;
+  const trailCount = 7;
   const trails = [];
+  const trailColors = ['#ffb2ee','#c9a1ff','#9fe8ff'];
   for(let i=0;i<trailCount;i++){
-    const f = document.createElement('div'); f.className='trail-flake'; f.innerHTML='✦';
-    // size & color variations
-    const size = 8 + Math.round(Math.random()*10);
+    const f = document.createElement('div'); f.className='trail'; f.innerHTML='✦';
+    const size = 8 + Math.round(Math.random()*12);
     f.style.fontSize = size + 'px';
-    // gradient-ish color variations
-    const colors = ['#ff9ef3','#c27bff','#7ad3ff'];
-    f.style.color = colors[i % colors.length];
-    f.style.left = startX + (Math.random()*20-10) + 'px';
-    f.style.top = startY + (Math.random()*20-10) + 'px';
-    f.style.opacity = 0.95 - (i*0.1);
-    f.style.transition = 'transform 900ms cubic-bezier(.2,.9,.3,1), opacity 700ms, left 900ms, top 900ms';
+    f.style.color = trailColors[i % trailColors.length];
+    f.style.left = (startX + (Math.random()*28 - 14)) + 'px';
+    f.style.top = (startY + (Math.random()*28 - 14)) + 'px';
+    f.style.opacity = 0.95 - i*0.08;
+    f.style.transform = `translate(-50%,-50%) rotate(${Math.random()*80}deg)`;
+    f.style.transition = 'transform 900ms cubic-bezier(.2,.9,.3,1), left 900ms, top 900ms, opacity 700ms';
     document.body.appendChild(f);
     trails.push(f);
   }
 
-  // animate: main star moves to cart; trails follow with stagger
+  // animate star + trails
   requestAnimationFrame(()=>{
     const dx = endX - startX;
     const dy = endY - startY;
-    star.style.transform = `translate(${dx}px, ${dy}px) scale(.28)`;
-    star.style.opacity = '0.96';
-
-    trails.forEach((f, idx)=>{
-      const tdx = dx * (0.25 + idx*(0.12 + Math.random()*0.08));
-      const tdy = dy * (0.25 + idx*(0.12 + Math.random()*0.08)) + (Math.random()*30 - 12);
-      f.style.left = (startX + tdx) + 'px';
-      f.style.top = (startY + tdy) + 'px';
-      f.style.opacity = 0.05 + Math.max(0, 0.9 - idx*0.12);
-      f.style.transform = `scale(${0.6 - idx*0.06}) rotate(${(idx*30 + Math.random()*60)}deg)`;
+    star.style.transform = `translate(${dx}px, ${dy}px) scale(0.28)`;
+    star.style.opacity = '0.98';
+    trails.forEach((f, idx) => {
+      const factor = 0.22 + idx*0.12 + Math.random()*0.06;
+      const tx = startX + dx * factor + (Math.random()*24 - 12);
+      const ty = startY + dy * factor + (Math.random()*42 - 18);
+      f.style.left = tx + 'px';
+      f.style.top = ty + 'px';
+      f.style.opacity = Math.max(0.04, 0.95 - idx*0.12);
+      f.style.transform = `translate(-50%,-50%) scale(${0.7 - idx*0.06}) rotate(${(idx*36 + Math.random()*60)}deg)`;
     });
   });
 
-  // cleanup + add to cart when finished
+  // cleanup + add to cart
   setTimeout(()=>{
-    // fade out trails & star
+    // fade out quickly
     star.style.opacity = '0';
-    trails.forEach((f,i)=>{ f.style.opacity = '0'; });
+    trails.forEach(f=>f.style.opacity = '0');
     setTimeout(()=>{
-      // remove elements
       if(star && star.parentNode) star.parentNode.removeChild(star);
       trails.forEach(f=>{ if(f && f.parentNode) f.parentNode.removeChild(f); });
-    }, 350);
+    }, 380);
 
-    // push to cart & UI update
+    // push item to cart after animation
     cart.push(product);
     updateCartCount();
 
-    // cart button micro bounce
-    cartBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}],{duration:360,easing:'ease'});
-
+    // bounce cart visually
+    cartBtn.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}],{duration:360,easing:'cubic-bezier(.2,.9,.3,1)'});
   }, 920);
 }
 
-/* init UI */
+/* =============================
+   Initialization
+   ============================= */
 function init(){
+  // fill 'all' arrays automatically if empty (if user didn't fill)
+  if(Array.isArray(window.productsGarden?.all) && window.productsGarden.all.length === 0){
+    // merge other categories into all if it's empty
+    for(const k of Object.keys(window.productsGarden)){
+      if(k === 'all') continue;
+      window.productsGarden.all = window.productsGarden.all.concat(window.productsGarden[k] || []);
+    }
+  }
+  if(Array.isArray(window.productsServer?.all) && window.productsServer.all.length === 0){
+    for(const k of Object.keys(window.productsServer)){
+      if(k === 'all') continue;
+      window.productsServer.all = window.productsServer.all.concat(window.productsServer[k] || []);
+    }
+  }
+
   // set discord link
-  const dl = document.getElementById('discord-link');
-  if(dl){ dl.href = (typeof DISCORD_INVITE === 'string') ? DISCORD_INVITE : '#'; dl.target='_blank'; }
-  // default payment pill
-  selectedPayment = 'paypal';
-  // categories empty until selection
+  const dl = document.getElementById('discord-link'); if(dl){ dl.href = DISCORD_INVITE; dl.target = '_blank'; }
+
+  // initial category rendering (empty until mode selected)
   renderCategories();
+
+  // keyboard: Escape returns to intro
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') resetIntro(); });
 }
 init();
-
-/* keyboard helpers */
-document.addEventListener('keydown', e=>{ if(e.key === 'Escape') resetIntro(); });
 </script>
 </body>
 </html>
